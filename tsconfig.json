@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["dom", "es2018"],
+    "allowJs": true,
+    "jsx": "react",
+    "downlevelIteration": true,
+    "strict": true,
+    "types": ["chrome"],
+  },
+  "include": ["src/**/*", "custom.d.ts"],
+  "exclude": ["./node_modules", "./dist"]
+}
