@@ -1,4 +1,4 @@
-import { bootstrap } from '@smartshopping/sdk';
+import { bootstrap } from 'smartshopping-sdk';
 
 const promocodes = [
   'SALE50',

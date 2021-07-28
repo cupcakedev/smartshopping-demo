@@ -14,7 +14,7 @@ import {
   EngineFinalCost,
   EngineConfig,
   EngineProgress,
-} from '@smartshopping/sdk';
+} from 'smartshopping-sdk';
 
 export const Demo = ({
   engine,
