@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Engine } from 'smartshopping-sdk';
-import { Demo } from './demo';
+import { Demo } from './components/Demo';
 
 try {
   const engine = new Engine();
