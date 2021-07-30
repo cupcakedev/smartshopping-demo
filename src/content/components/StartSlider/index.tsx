@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Header, Text, ApplyButton, CloseButton } from './styles';
+import { Container } from '../styled_components';
+import { Header, Text, ApplyButton, CloseButton } from './styles';
 
 interface IProps {
   close: () => void;

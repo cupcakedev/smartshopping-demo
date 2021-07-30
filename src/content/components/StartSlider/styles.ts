@@ -1,17 +1,5 @@
 import styled from 'styled-components';
 
-const Container = styled.div`
-  font-family: Verdana;
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-  height: 1 0 180px;
-  padding: 10px 15px;
-  background-color: white;
-  border-radius: 15px;
-  border: 1px solid black;
-`;
-
 const Header = styled.p`
   margin: 0;
   line-height: 1.1em;
@@ -52,4 +40,4 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-export { Container, Header, Text, ApplyButton, CloseButton };
+export { Header, Text, ApplyButton, CloseButton };

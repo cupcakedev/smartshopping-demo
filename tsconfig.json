@@ -6,7 +6,7 @@
     "jsx": "react",
     "downlevelIteration": true,
     "strict": true,
-    "types": ["chrome"],
+    "types": ["chrome"]
   },
   "include": ["src/**/*", "custom.d.ts"],
   "exclude": ["./node_modules", "./dist"]

@@ -26,7 +26,7 @@ module.exports = (env) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.(?:ico|gif|png|svg|jpg|jpeg)$/i,
+          test: /\.(?:ico|gif|png|svg|jpg|jpeg|woff2)$/i,
           loader: 'url-loader',
         },
         {

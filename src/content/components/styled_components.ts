@@ -1,7 +1,16 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import root from 'react-shadow/styled-components';
 
+import Poppins from 'src/content/demo/assetsNew/fonts/poppins.woff2';
+import { COLORS } from './constants';
+
 export const GlobalStyle = createGlobalStyle` 
+@font-face {
+  font-family: 'Poppins';
+  url(${Poppins}) format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,7 +29,9 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
+  font-family: 'Poppins';
+  font-weight: 500;
+  color: ${COLORS.dark};
 	vertical-align: baseline;
 }
 article, aside, details, figcaption, figure, 
@@ -73,4 +84,18 @@ export const MockupRoot = styled(root.div)<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.visible ? '1' : '0')};
   transition: visibility 1s, opacity 1s;
+`;
+
+export const Container = styled.div`
+  transform: scale(0.7, 0.7);
+  height: 100%;
+  width: 100%;
+  max-height: 600px;
+  max-width: 990px;
+  box-shadow: 0 3px 33px 0 rgba(0, 0, 0, 0.53);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: white;
 `;

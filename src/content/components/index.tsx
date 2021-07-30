@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import { StartSlider } from './components/StartSlider';
-import { StartDialog } from './components/StartDialog';
-import { NoDealsDialog } from './components/NoDealsDialog';
-import { TestingDialog } from './components/TestingDialog';
-import { ResultDialog } from './components/ResultDialog';
+import { StartSlider } from './StartSlider';
+import { StartDialog } from './StartDialog';
+import { NoDealsDialog } from './NoDealsDialog';
+import { TestingDialog } from './TestingDialog';
+import { ResultDialog } from './ResultDialog';
 
 import { GlobalStyle, MockupRoot, SliderRoot } from './styled_components';
 
