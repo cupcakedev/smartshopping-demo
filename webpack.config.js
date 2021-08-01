@@ -48,7 +48,7 @@ module.exports = (env) => {
             force: true,
           },
           {
-            from: './src/smartshoppingIcon.png',
+            from: './src/content/assets/smartshoppingIcon.png',
           },
         ],
       }),
