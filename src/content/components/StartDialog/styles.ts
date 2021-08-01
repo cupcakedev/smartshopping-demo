@@ -14,8 +14,6 @@ export const Grid = styled.div`
     'i t2'
     'i b'
     'i t3';
-  font-size: 20px;
-  line-height: 1;
 `;
 
 export const Image = styled.img`
