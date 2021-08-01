@@ -30,22 +30,3 @@ export const Text = styled.p`
   font-size: 28px;
   color: ${COLORS.grey};
 `;
-
-export const StartButton = styled.button`
-  grid-area: b;
-  margin-left: 50px;
-  width: 250px;
-  height: 50px;
-  border: none;
-  border-radius: 20px;
-  background-color: ${COLORS.dark};
-  color: ${COLORS.extraLightGrey};
-  font-size: 30px;
-  line-height: 30px;
-  cursor: pointer;
-  align-self: center;
-  transition: background-color 0.1s;
-  &:hover {
-    background-color: ${COLORS.secondary};
-  }
-`;

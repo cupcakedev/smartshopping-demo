@@ -1,8 +1,8 @@
 {
-  "name": "Smart shopping",
-  "short_name": "SS.demo",
-  "version": "0.0.0",
-  "description": "Coupon auto apply",
+  "name": "SmartShopping Demo",
+  "short_name": "Demo",
+  "version": "1.0.0",
+  "description": "Coupon Autoapply",
   "manifest_version": 3,
   "permissions": ["storage", "tabs"],
   "host_permissions": ["*://*/*"],
@@ -21,11 +21,11 @@
     "object-src": "self"
   },
   "action": {
-    "default_icon": "cupcake_icon.png"
+    "default_icon": "smartshoppingIcon.png"
   },
   "icons": {
-    "16": "cupcake_icon.png",
-    "48": "cupcake_icon.png",
-    "128": "cupcake_icon.png"
+    "16": "smartshoppingIcon.png",
+    "48": "smartshoppingIcon.png",
+    "128": "smartshoppingIcon.png"
   }
 }

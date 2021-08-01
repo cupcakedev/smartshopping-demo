@@ -23,8 +23,6 @@ export const Grid = styled.div`
     'cog-l bar cog-r'
     '. count .';
   place-items: center;
-  opacity: 0;
-  animation: ${fadeIn} 1s linear forwards;
 `;
 
 const wiggle = keyframes`

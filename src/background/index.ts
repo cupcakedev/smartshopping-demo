@@ -1,6 +1,16 @@
 import { bootstrap } from 'smartshopping-sdk';
 
-const promocodes = ['SALE50', 'SAVE40', 'BONUS500', 'A80'];
+const promocodes = [
+  'KODI',
+  'KODI1',
+  'KODI2',
+  'KODI3',
+  'KODI4',
+  'KODI5',
+  'KODI6',
+  'KODI7',
+  'KODI8',
+];
 
 const { install, process } = bootstrap();
 

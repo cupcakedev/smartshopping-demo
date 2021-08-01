@@ -10,7 +10,7 @@ import logo from '../assets/smartshoppingLogo.png';
 
 import {
   GlobalStyle,
-  MockupRoot,
+  ModalRoot,
   SliderRoot,
   Container,
   SmartShoppingLogo,
@@ -38,10 +38,23 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const [currentCode, setCurrentCode] = useState<string>('');
   const [bestCode, setBestCode] = useState<string>('');
 
-  const closePopup = () => setStage('INACTIVE');
-  const activateFlow = () => setStage('READY');
+  const [modalRootVisibility, setModalRootVisibility] =
+    useState<boolean>(false);
+
+  const closeSlider = () => setStage('INACTIVE');
+  const closeModal = async () => {
+    setModalRootVisibility(false);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setStage('INACTIVE');
+  };
+  const activateFlow = async () => {
+    setStage('READY');
+    await new Promise((resolve) => setTimeout(resolve));
+    setModalRootVisibility(true);
+  };
   const start = async () => {
     await engine.apply();
+    await engine.applyBest();
   };
 
   // engine event listeners
@@ -115,47 +128,49 @@ export const Demo = ({ engine }: { engine: Engine }) => {
 
   return (
     <>
-      <SliderRoot visible={stage === 'AWAIT'}>
-        <GlobalStyle />
-        <StartSlider
-          start={activateFlow}
-          close={closePopup}
-          promocodes={promocodes}
-          shop={shop}
-          total={checkoutState.total as number}
-        />
-      </SliderRoot>
-      <MockupRoot
-        visible={['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage)}
-      >
-        <GlobalStyle />
-        <Container stage={stage}>
-          <SmartShoppingLogo src={logo} />
-          {stage === 'READY' && (
-            <StartDialog
-              start={start}
-              close={closePopup}
-              totalAmount={promocodes.length}
-            />
-          )}
-          {stage === 'APPLY' && (
-            <TestingDialog
-              code={currentCode}
-              current={promocodes.indexOf(currentCode) + 1}
-              totalAmount={promocodes.length}
-            />
-          )}
-          {stage === 'SUCCESS' && (
-            <ResultDialog
-              close={closePopup}
-              initialPrice={checkoutState.total as number}
-              priceWithDeal={finalCost[bestCode]}
-              bestCode={bestCode}
-            />
-          )}
-          {stage === 'FAIL' && <NoDealsDialog close={closePopup} />}
-        </Container>
-      </MockupRoot>
+      {stage === 'AWAIT' && (
+        <SliderRoot>
+          <GlobalStyle />
+          <StartSlider
+            start={activateFlow}
+            close={closeSlider}
+            promocodes={promocodes.length}
+            shop={shop}
+            total={checkoutState.total as number}
+          />
+        </SliderRoot>
+      )}
+      {['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage) && (
+        <ModalRoot visible={modalRootVisibility}>
+          <GlobalStyle />
+          <Container stage={stage}>
+            <SmartShoppingLogo src={logo} />
+            {stage === 'READY' && (
+              <StartDialog
+                start={start}
+                close={closeModal}
+                totalAmount={promocodes.length}
+              />
+            )}
+            {stage === 'APPLY' && (
+              <TestingDialog
+                code={currentCode}
+                current={promocodes.indexOf(currentCode) + 1}
+                totalAmount={promocodes.length}
+              />
+            )}
+            {stage === 'SUCCESS' && (
+              <ResultDialog
+                close={closeModal}
+                initialPrice={checkoutState.total as number}
+                priceWithDeal={finalCost[bestCode]}
+                bestCode={bestCode}
+              />
+            )}
+            {stage === 'FAIL' && <NoDealsDialog close={closeModal} />}
+          </Container>
+        </ModalRoot>
+      )}
     </>
   );
 };

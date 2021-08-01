@@ -3,8 +3,8 @@ import React from 'react';
 import { COLORS } from '../constants';
 import smartbot from '../../assets/smartbot.png';
 
-import { CloseButton } from '../styled_components';
-import { Grid, Image, StartButton, Text } from './styles';
+import { CloseButton, MainButton } from '../styled_components';
+import { Grid, Image, Text } from './styles';
 
 interface IProps {
   totalAmount: number;
@@ -27,7 +27,7 @@ const StartDialog = ({ totalAmount, close, start }: IProps) => (
         coupons!
       </Text>
       <Text style={{ gridArea: 't2' }}>Let us try to</Text>
-      <StartButton onClick={start}>APPLY CODES</StartButton>
+      <MainButton onClick={start} style={{marginLeft: 50}}>APPLY CODES</MainButton>
       <Text style={{ gridArea: 't3' }}> and get the best deal for you</Text>
     </Grid>
   </>

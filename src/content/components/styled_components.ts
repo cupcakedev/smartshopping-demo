@@ -24,7 +24,6 @@ time, mark, audio, video {
 	font-size: 100%;
   font-family: Helvetica;
   font-weight: 500;
-  color: ${COLORS.dark};
 	vertical-align: baseline;
 }
 article, aside, details, figcaption, figure, 
@@ -58,19 +57,16 @@ button:hover button:active {
 }
 `;
 
-export const SliderRoot = styled(root.div)<{ visible: boolean }>`
+export const SliderRoot = styled(root.div)`
   position: fixed;
   z-index: 50000;
-  width: 300px;
-  height: 180px;
-  top: 30px;
-  right: 30px;
-  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.visible ? '1' : '0')};
-  transition: visibility 1s, opacity 1s;
+  width: 280px;
+  height: 350px;
+  bottom: 0px;
+  right: 0px;
 `;
 
-export const MockupRoot = styled(root.div)<{ visible: boolean }>`
+export const ModalRoot = styled(root.div)<{ visible: boolean }>`
   position: fixed;
   z-index: 50000;
   width: 100vw;
@@ -81,9 +77,8 @@ export const MockupRoot = styled(root.div)<{ visible: boolean }>`
   justify-content: space-around;
   align-items: center;
   backdrop-filter: grayscale(100%) blur(10px);
-  visibility: ${(props) => (props.visible ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.visible ? '1' : '0')};
-  transition: visibility 1s, opacity 1s;
+  transition: opacity 0.5s;
 `;
 
 export const Container = styled.div<{ stage: string }>`
@@ -93,14 +88,14 @@ export const Container = styled.div<{ stage: string }>`
       READY: '700px',
       APPLY: '580px',
       SUCCESS: '700px',
-      FAIL: '700px',
+      FAIL: '580px',
     }[props.stage])};
   height: ${(props) =>
     ({
       READY: '420px',
       APPLY: '300px',
       SUCCESS: '420px',
-      FAIL: '420px',
+      FAIL: '300px',
     }[props.stage])};
   transition: width 0.3s, height 0.3s;
   box-shadow: 0 3px 33px 0 rgba(0, 0, 0, 0.53);
@@ -113,6 +108,24 @@ export const Container = styled.div<{ stage: string }>`
   color: ${COLORS.dark};
 `;
 
+export const MainButton = styled.button`
+  grid-area: b;
+  width: 250px;
+  height: 50px;
+  border: none;
+  border-radius: 20px;
+  background-color: ${COLORS.dark};
+  color: ${COLORS.extraLightGrey};
+  font-size: 30px;
+  line-height: 30px;
+  cursor: pointer;
+  align-self: center;
+  transition: background-color 0.1s;
+  &:hover {
+    background-color: ${COLORS.secondary};
+  }
+`;
+
 export const CloseButton = styled.button`
   position: absolute;
   top: 5px;
@@ -123,6 +136,7 @@ export const CloseButton = styled.button`
   padding-bottom: 3px;
   border-radius: 15px;
   border: 2px solid ${COLORS.lightGrey};
+  background-color: transparent;
   color: ${COLORS.lightGrey};
   line-height: 20px;
   font-size: 20px;
