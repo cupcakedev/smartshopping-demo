@@ -129,7 +129,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         visible={['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage)}
       >
         <GlobalStyle />
-        <Container>
+        <Container stage={stage}>
           <SmartShoppingLogo src={logo} />
           {stage === 'READY' && (
             <StartDialog
@@ -150,6 +150,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
               close={closePopup}
               initialPrice={checkoutState.total as number}
               priceWithDeal={finalCost[bestCode]}
+              bestCode={bestCode}
             />
           )}
           {stage === 'FAIL' && <NoDealsDialog close={closePopup} />}

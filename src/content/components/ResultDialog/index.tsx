@@ -7,9 +7,15 @@ interface IProps {
   close: () => void;
   initialPrice: number;
   priceWithDeal: number;
+  bestCode: string;
 }
 
-const ResultDialog = ({ initialPrice, priceWithDeal, close }: IProps) => (
+const ResultDialog = ({
+  initialPrice,
+  priceWithDeal,
+  bestCode,
+  close,
+}: IProps) => (
   <Grid>
     <CloseButton onClick={close}>x</CloseButton>
   </Grid>

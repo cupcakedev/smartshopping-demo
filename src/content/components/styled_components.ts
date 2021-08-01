@@ -86,12 +86,23 @@ export const MockupRoot = styled(root.div)<{ visible: boolean }>`
   transition: visibility 1s, opacity 1s;
 `;
 
-export const Container = styled.div`
+export const Container = styled.div<{ stage: string }>`
   position: relative;
-  height: 100%;
-  width: 100%;
-  max-height: 420px;
-  max-width: 700px;
+  width: ${(props) =>
+    ({
+      READY: '700px',
+      APPLY: '580px',
+      SUCCESS: '700px',
+      FAIL: '700px',
+    }[props.stage])};
+  height: ${(props) =>
+    ({
+      READY: '420px',
+      APPLY: '300px',
+      SUCCESS: '420px',
+      FAIL: '420px',
+    }[props.stage])};
+  transition: width 0.3s, height 0.3s;
   box-shadow: 0 3px 33px 0 rgba(0, 0, 0, 0.53);
   border-radius: 15px;
   display: flex;
