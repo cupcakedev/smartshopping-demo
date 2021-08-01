@@ -1,5 +1,7 @@
 import React from 'react';
-import { Container } from '../styled_components';
+
+import { CloseButton } from '../styled_components';
+import { Grid } from './styles';
 
 interface IProps {
   close: () => void;
@@ -8,7 +10,9 @@ interface IProps {
 }
 
 const ResultDialog = ({ initialPrice, priceWithDeal, close }: IProps) => (
-  <Container></Container>
+  <Grid>
+    <CloseButton onClick={close}>x</CloseButton>
+  </Grid>
 );
 
 export { ResultDialog };

@@ -6,7 +6,15 @@ import { NoDealsDialog } from './NoDealsDialog';
 import { TestingDialog } from './TestingDialog';
 import { ResultDialog } from './ResultDialog';
 
-import { GlobalStyle, MockupRoot, SliderRoot } from './styled_components';
+import logo from '../assets/smartshoppingLogo.png';
+
+import {
+  GlobalStyle,
+  MockupRoot,
+  SliderRoot,
+  Container,
+  SmartShoppingLogo,
+} from './styled_components';
 
 import {
   Engine,
@@ -16,13 +24,7 @@ import {
   EngineProgress,
 } from 'smartshopping-sdk';
 
-export const Demo = ({
-  engine,
-  hidden,
-}: {
-  engine: Engine;
-  hidden?: boolean;
-}) => {
+export const Demo = ({ engine }: { engine: Engine }) => {
   const [stage, setStage] = useState<
     'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
   >('INACTIVE');
@@ -40,7 +42,6 @@ export const Demo = ({
   const activateFlow = () => setStage('READY');
   const start = async () => {
     await engine.apply();
-    await engine.applyBest();
   };
 
   // engine event listeners
@@ -112,7 +113,6 @@ export const Demo = ({
     }
   }, [stage, engine]);
 
-  if (hidden) return null;
   return (
     <>
       <SliderRoot visible={stage === 'AWAIT'}>
@@ -129,28 +129,31 @@ export const Demo = ({
         visible={['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage)}
       >
         <GlobalStyle />
-        {stage === 'READY' && (
-          <StartDialog
-            start={start}
-            close={closePopup}
-            totalAmount={promocodes.length}
-          />
-        )}
-        {stage === 'APPLY' && (
-          <TestingDialog
-            code={currentCode}
-            current={promocodes.indexOf(currentCode) + 1}
-            totalAmount={promocodes.length}
-          />
-        )}
-        {stage === 'SUCCESS' && (
-          <ResultDialog
-            close={closePopup}
-            initialPrice={checkoutState.total as number}
-            priceWithDeal={finalCost[bestCode]}
-          />
-        )}
-        {stage === 'FAIL' && <NoDealsDialog close={closePopup} />}
+        <Container>
+          <SmartShoppingLogo src={logo} />
+          {stage === 'READY' && (
+            <StartDialog
+              start={start}
+              close={closePopup}
+              totalAmount={promocodes.length}
+            />
+          )}
+          {stage === 'APPLY' && (
+            <TestingDialog
+              code={currentCode}
+              current={promocodes.indexOf(currentCode) + 1}
+              totalAmount={promocodes.length}
+            />
+          )}
+          {stage === 'SUCCESS' && (
+            <ResultDialog
+              close={closePopup}
+              initialPrice={checkoutState.total as number}
+              priceWithDeal={finalCost[bestCode]}
+            />
+          )}
+          {stage === 'FAIL' && <NoDealsDialog close={closePopup} />}
+        </Container>
       </MockupRoot>
     </>
   );

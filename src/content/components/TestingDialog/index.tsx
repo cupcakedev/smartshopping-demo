@@ -1,6 +1,6 @@
-/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
-import { Container } from '../styled_components';
+
+import { Grid } from './styles';
 
 interface IProps {
   code: string;
@@ -8,8 +8,6 @@ interface IProps {
   totalAmount: number;
 }
 
-const TestingDialog = ({ code, current, totalAmount }: IProps) => (
-  <Container></Container>
-);
+const TestingDialog = ({ code, current, totalAmount }: IProps) => <Grid></Grid>;
 
 export { TestingDialog };

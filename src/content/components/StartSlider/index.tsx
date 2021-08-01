@@ -1,6 +1,11 @@
 import React from 'react';
-import { Container } from '../styled_components';
-import { Header, Text, ApplyButton, CloseButton } from './styles';
+import {
+  SmallContainer,
+  Header,
+  Text,
+  ApplyButton,
+  CloseButton,
+} from './styles';
 
 interface IProps {
   close: () => void;
@@ -11,14 +16,14 @@ interface IProps {
 }
 
 const StartSlider = ({ promocodes, total, shop, close, start }: IProps) => (
-  <Container>
+  <SmallContainer>
     <Header>SmartShopping.ai info:</Header>
     <Text>Checkout page of: {shop}</Text>
     <Text>Coupons found: {promocodes.join(', ')}</Text>
     <Text>Cart total: {total}</Text>
     <ApplyButton onClick={start}>Try CAA</ApplyButton>
     <CloseButton onClick={close}>x</CloseButton>
-  </Container>
+  </SmallContainer>
 );
 
 export { StartSlider };

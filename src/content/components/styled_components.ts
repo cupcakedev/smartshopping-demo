@@ -1,16 +1,9 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import root from 'react-shadow/styled-components';
 
-import Poppins from 'src/content/demo/assetsNew/fonts/poppins.woff2';
 import { COLORS } from './constants';
 
-export const GlobalStyle = createGlobalStyle` 
-@font-face {
-  font-family: 'Poppins';
-  url(${Poppins}) format('woff2');
-  font-weight: 300;
-  font-style: normal;
-}
+export const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -29,7 +22,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-  font-family: 'Poppins';
+  font-family: Helvetica;
   font-weight: 500;
   color: ${COLORS.dark};
 	vertical-align: baseline;
@@ -56,11 +49,18 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+button {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+button:hover button:active {
+  outline: none;
+}
 `;
 
 export const SliderRoot = styled(root.div)<{ visible: boolean }>`
   position: fixed;
-  z-index: 60000;
+  z-index: 50000;
   width: 300px;
   height: 180px;
   top: 30px;
@@ -87,15 +87,45 @@ export const MockupRoot = styled(root.div)<{ visible: boolean }>`
 `;
 
 export const Container = styled.div`
-  transform: scale(0.7, 0.7);
+  position: relative;
   height: 100%;
   width: 100%;
-  max-height: 600px;
-  max-width: 990px;
+  max-height: 420px;
+  max-width: 700px;
   box-shadow: 0 3px 33px 0 rgba(0, 0, 0, 0.53);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   overflow: hidden;
-  background: white;
+  background: ${COLORS.extraLightGrey};
+  color: ${COLORS.dark};
+`;
+
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 30px;
+  width: 30px;
+  padding-left: 6px;
+  padding-bottom: 3px;
+  border-radius: 15px;
+  border: 2px solid ${COLORS.lightGrey};
+  color: ${COLORS.lightGrey};
+  line-height: 20px;
+  font-size: 20px;
+  font-weight: 100;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  &:hover {
+    color: ${COLORS.dark};
+    border-color: ${COLORS.dark};
+  }
+`;
+
+export const SmartShoppingLogo = styled.img`
+  margin-top: 20px;
+  width: 300px;
+  height: 40px;
 `;
