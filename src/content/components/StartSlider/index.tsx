@@ -4,6 +4,7 @@ import { COLORS } from '../constants';
 import { Grid, Header, Text, Start, Close } from './styles';
 
 interface IProps {
+  inspectOnly: boolean;
   close: () => void;
   start: () => void;
   promocodes: number;
@@ -11,7 +12,14 @@ interface IProps {
   shop: string;
 }
 
-const StartSlider = ({ promocodes, total, shop, close, start }: IProps) => {
+const StartSlider = ({
+  inspectOnly,
+  promocodes,
+  total,
+  shop,
+  close,
+  start,
+}: IProps) => {
   const [fade, setFade] = useState<'in' | 'out'>('in');
   const fadeout = async () => {
     setFade('out');
@@ -32,7 +40,9 @@ const StartSlider = ({ promocodes, total, shop, close, start }: IProps) => {
       <Text>
         Cart total: <span style={{ color: COLORS.secondary }}>{total}</span>
       </Text>
-      <Start onClick={start}>START</Start>
+      <Start onClick={inspectOnly ? fadeout : start}>
+        {inspectOnly ? 'CLOSE' : 'START'}
+      </Start>
       <Close onClick={fadeout}>x</Close>
     </Grid>
   );

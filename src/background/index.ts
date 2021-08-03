@@ -1,13 +1,19 @@
 import { bootstrap } from 'smartshopping-sdk';
+import { requirePromocodes, requireShops } from '../utils';
 
 const promocodes = ['TEST', 'KODI', 'COUPON', 'CODE'];
 
 const { install, process } = bootstrap();
 
-chrome.runtime.onInstalled.addListener(install);
-chrome.tabs.onUpdated.addListener((tabId) => {
-  process(tabId, promocodes).catch(() => {});
+chrome.runtime.onInstalled.addListener(() => {
+  install();
+  requireShops();
 });
-chrome.tabs.onReplaced.addListener((addedTabId) => {
-  process(addedTabId, promocodes).catch(() => {});
+chrome.tabs.onUpdated.addListener(async (tabId) => {
+  const codes = await requirePromocodes(tabId);
+  process(tabId, codes).catch(() => {});
+});
+chrome.tabs.onReplaced.addListener(async (tabId) => {
+  const codes = await requirePromocodes(tabId);
+  process(tabId, codes).catch(() => {});
 });

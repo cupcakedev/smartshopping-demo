@@ -38,6 +38,8 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const [currentCode, setCurrentCode] = useState<string>('');
   const [bestCode, setBestCode] = useState<string>('');
 
+  const [inspectOnly, setInspectOnly] = useState<boolean>(false);
+
   const [modalRootVisibility, setModalRootVisibility] =
     useState<boolean>(false);
 
@@ -60,6 +62,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   // engine event listeners
   const configListener = (state: EngineConfig) => {
     setShop(state.shopId);
+    setInspectOnly(state.apply.length === 0);
   };
   const checkoutStateListener = (state: EngineCheckoutState) => {
     setCheckoutState(state);
@@ -78,7 +81,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   };
 
   const checkoutListener = (state: boolean) => {
-    setStage(state ? 'IDLE' : 'INACTIVE');
+    if (stage === 'INACTIVE' )setStage(state ? 'IDLE' : 'INACTIVE');
   };
 
   const progressListener = (state: EngineProgress) => {
@@ -93,6 +96,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         break;
       case 'APPLY-BEST_END':
         setStage(bestCode === '' ? 'FAIL' : 'SUCCESS');
+        console.log(engine.finalCost);
         break;
       case 'CANCEL':
       case 'ERROR':
@@ -122,8 +126,19 @@ export const Demo = ({ engine }: { engine: Engine }) => {
 
   useEffect(() => {
     if (stage === 'IDLE') {
-      engine.inspect();
+      if (engine.checkoutState.total) {
+        setModalRootVisibility(true);
+      } else {
+        if (document.readyState === 'complete') {
+          engine.inspect();
+        } else {
+          window.onload = () => engine.inspect();
+        }
+      }
     }
+    return () => {
+      window.onload = () => {};
+    };
   }, [stage, engine]);
 
   return (
@@ -132,6 +147,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         <SliderRoot>
           <GlobalStyle />
           <StartSlider
+            inspectOnly={inspectOnly}
             start={activateFlow}
             close={closeSlider}
             promocodes={promocodes.length}
