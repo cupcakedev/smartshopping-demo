@@ -135,6 +135,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     if (Object.keys(engine.finalCost).length) {
       setModalRootVisibility(true);
     }
+    if (stage === 'IDLE') console.log('checkout');
   }, [stage, engine]);
 
   return (
