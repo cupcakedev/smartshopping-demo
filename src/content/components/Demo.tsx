@@ -81,7 +81,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   };
 
   const checkoutListener = (state: boolean) => {
-    if (stage === 'INACTIVE' )setStage(state ? 'IDLE' : 'INACTIVE');
+    if (stage === 'INACTIVE') setStage(state ? 'IDLE' : 'INACTIVE');
   };
 
   const progressListener = (state: EngineProgress) => {
@@ -95,7 +95,12 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         setStage('APPLY');
         break;
       case 'APPLY-BEST_END':
-        setStage(bestCode === '' ? 'FAIL' : 'SUCCESS');
+        console.log(bestCode);
+        console.log(engine.bestCode);
+        setStage(engine.bestCode === '' ? 'FAIL' : 'SUCCESS');
+        console.log(checkoutState.total);
+        console.log(engine.checkoutState.total);
+        console.log(finalCost);
         console.log(engine.finalCost);
         break;
       case 'CANCEL':
@@ -124,25 +129,17 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     };
   });
 
+  const test = () => engine.inspect();
+
   useEffect(() => {
-    if (stage === 'IDLE') {
-      if (engine.checkoutState.total) {
-        setModalRootVisibility(true);
-      } else {
-        if (document.readyState === 'complete') {
-          engine.inspect();
-        } else {
-          window.onload = () => engine.inspect();
-        }
-      }
+    if (Object.keys(engine.finalCost).length) {
+      setModalRootVisibility(true);
     }
-    return () => {
-      window.onload = () => {};
-    };
   }, [stage, engine]);
 
   return (
     <>
+      <button onClick={test}>inspect</button>
       {stage === 'AWAIT' && (
         <SliderRoot>
           <GlobalStyle />

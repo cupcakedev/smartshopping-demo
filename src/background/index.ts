@@ -1,8 +1,6 @@
 import { bootstrap } from 'smartshopping-sdk';
 import { requirePromocodes, requireShops } from '../utils';
 
-const promocodes = ['TEST', 'KODI', 'COUPON', 'CODE'];
-
 const { install, process } = bootstrap();
 
 chrome.runtime.onInstalled.addListener(() => {
