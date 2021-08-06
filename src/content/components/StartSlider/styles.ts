@@ -3,31 +3,31 @@ import { COLORS } from '../constants';
 
 const fadeIn = keyframes`
   from {
-    bottom: -360px;
+    right: -360px;
   }
   to {
-    bottom: 0;
+    right: 0;
   }
 `;
 
 const fadeOut = keyframes`
   from {
-    bottom: 0px;
+    right: 0px;
   }
   to {
-    bottom: -360px;
+    right: -360px;
   }
 `;
 
 export const Grid = styled.div<{ fade: 'in' | 'out' }>`
   position: relative;
-  width: 280px;
-  height: 360px;
-  border-radius: 100px 0 0 0;
+  width: 340px;
+  height: 420px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 25px 0px rgba(34, 60, 80, 0.2);
   padding-top: 40px;
-  padding-left: 40px;
-  background-color: ${COLORS.dark};
-  color: ${COLORS.extraLightGrey};
+  background-color: ${COLORS.white};
+  color: ${COLORS.grey};
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 50px 50px 50px 1fr;
@@ -44,55 +44,58 @@ export const Grid = styled.div<{ fade: 'in' | 'out' }>`
 
 export const Header = styled.p`
   text-align: center;
-  font-size: 28px;
+  font-size: 24px;
+  font-weight: 800;
+  color: ${COLORS.dark}
 `;
 
 export const Text = styled.p`
+  text-align: center;
   margin: 5px 0;
   font-size: 20px;
+  font-weight: 500;
 `;
 
 export const Start = styled.button`
-  width: 200px;
-  height: 40px;
-  margin-left: 10px;
-  margin-bottom: 10px;
+  width: 300px;
+  height: 50px;
+  margin: 0 20px 34px 20px;
   border: none;
-  border-radius: 17px;
-  background-color: ${COLORS.secondary};
-  color: ${COLORS.extraLightGrey};
-  font-size: 30px;
-  line-height: 30px;
+  border-radius: 12px;
+  background-color: ${COLORS.primary};
+  color: ${COLORS.white};
+  font-size: 14px;
+  line-height: 14px;
   cursor: pointer;
   align-self: center;
   transition: background-color 0.1s;
   &:hover {
-    background-color: ${COLORS.primary};
+    background-color: ${COLORS.secondary};
   }
 `;
 
 export const Close = styled.button`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 12px;
+  right: 12px;
   height: 40px;
   width: 40px;
+  border: 0;
   padding-left: 10px;
   padding-bottom: 6px;
-  border-radius: 0 0 0 25px;
-  border-top: none;
-  border-right: none;
-  border-bottom: 2px solid ${COLORS.grey};
-  border-left: 2px solid ${COLORS.grey};
   background-color: transparent;
-  color: ${COLORS.grey};
-  line-height: 25px;
-  font-size: 25px;
-  font-weight: 100;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+`;
+
+export const Image = styled.img`
+  width: 36px;
+  margin: 0 6px -6px 0;
+`;
+
+export const CloseIcon = styled.img`
+  width: 15px;
+  transition: 0.2s;
   &:hover {
-    color: ${COLORS.extraLightGrey};
-    border-color: ${COLORS.extraLightGrey};
+    transform: scale(1.2);
   }
 `;

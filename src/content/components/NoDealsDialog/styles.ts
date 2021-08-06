@@ -2,20 +2,38 @@ import styled from 'styled-components';
 import { COLORS } from 'src/content/components/constants';
 
 export const Grid = styled.div`
-  width: 580px;
-  height: 240px;
+  width: 660px;
+  height: 300px;
+  padding: 8px 0 0 40px;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 30px 80px 50px 80px;
+  grid-template-columns: 350px 310px;
+  grid-template-rows: 80px 90px 80px;
   grid-template-areas:
-    '.'
-    't1'
-    'b'
-    't2';
+    'h i'
+    't1 i'
+    'b i';
   place-items: center;
+`;
+
+export const Header = styled.p`
+  grid-area: h;
+  font-size: 24px;
+  justify-self: start;
+  font-weight: bold;
+  color: ${COLORS.primary};
 `;
 
 export const Text = styled.p`
   color: ${COLORS.grey};
-  font-size: 32px;
+  font-size: 22px;
+  font-weight: 500;
+  justify-self: start;
+`;
+
+export const Image = styled.img`
+  grid-area: i;
+  width: 200px;
+  align-self: start;
+  filter: invert(100%) invert(40%) sepia(89%) saturate(3163%) hue-rotate(230deg)
+    brightness(94%) contrast(99%);
 `;
