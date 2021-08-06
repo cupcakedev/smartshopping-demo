@@ -3,7 +3,8 @@ import React from 'react';
 import { COLORS } from '../constants';
 import { CloseButton, MainButton } from '../styled_components';
 import { Grid, Header, Text, Image } from './styles';
-import smartPeople from '../../assets/smartPeople.png';
+import botWithMoney from '../../assets/botWithMoney.png'
+import closeIcon from '../../assets/closeIcon.png'
 
 interface IProps {
   close: () => void;
@@ -21,22 +22,21 @@ const ResultDialog = ({
   <>
     <Grid>
       <Header>Success!</Header>
-      <Image src={smartPeople} />
+      <Image src={botWithMoney} />
       <Text style={{ gridArea: 't1' }}>
-        Code <span style={{ color: COLORS.primary }}>{bestCode}</span>{' '}
-        succesfully applied
+        Cart total:{' '}
+        <span style={{ color: COLORS.primary }}>{' $' + priceWithDeal.toFixed(2)}</span>
       </Text>
       <Text style={{ gridArea: 't2' }}>
-        Initial price:{' '}
-        <span style={{ color: COLORS.secondary }}>{initialPrice}</span>
+        You saved:{' '}
+        <span style={{ color: COLORS.primary }}>{' $' + (initialPrice - priceWithDeal).toFixed(2)}</span>
       </Text>
       <Text style={{ gridArea: 't3' }}>
-        Current price:{' '}
-        <span style={{ color: COLORS.secondary }}>{priceWithDeal}</span>
+        With code:{' '} <span style={{ color: COLORS.primary }}>{bestCode}</span>
       </Text>
-      <MainButton onClick={close} style={{ gridArea: 'b', width: 400 }}>RETURN TO CHECKOUT</MainButton>
+      <MainButton onClick={close} style={{ gridArea: 'b' }}>Continue to checkout</MainButton>
     </Grid>
-    <CloseButton onClick={close}>x</CloseButton>
+    <CloseButton onClick={close} src={closeIcon} />
   </>
 );
 

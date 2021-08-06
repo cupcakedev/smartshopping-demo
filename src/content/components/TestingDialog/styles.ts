@@ -12,16 +12,16 @@ to {
 
 export const Grid = styled.div`
   display: grid;
-  width: 580px;
-  height: 200px;
-  padding-left: 4px;
-  grid-template-columns: 88px 400px 88px;
-  grid-template-rows: 80px 50px 50px 50px;
+  width: 660px;
+  height: 300px;
+  margin: 0 0 0 40px;
+  grid-template-columns: 580px 80px;
+  grid-template-rows: 60px 80px 100px 80px;
   grid-template-areas:
-    '. title .'
-    '. code .'
-    'cog-l bar cog-r'
-    '. count .';
+    'title .'
+    'bar count'
+    'code .'
+    'i .';
   place-items: center;
 `;
 
@@ -37,43 +37,43 @@ to {
 export const ProgressBar = styled.progress`
   grid-area: bar;
   appearance: none;
-  width: 400px;
+  width: 560px;
   height: 40px;
   &::-webkit-progress-bar {
-    background-color: ${COLORS.dark};
-    border-radius: 20px;
-    padding: 4px;
+    background-color: ${COLORS.extraLightGrey};
+    border-radius: 6px;
   }
   &::-webkit-progress-value {
-    height: 32px;
-    border-radius: 20px;
-    background-image: -webkit-linear-gradient(left, ${COLORS.secondary}, ${COLORS.primary});
+    height: 40px;
+    border-radius: 6px;
+    background-image: -webkit-linear-gradient(left, ${COLORS.primary}, ${COLORS.primary});
     transition: width 0.4s;
     animation: ${wiggle} 2s linear infinite;
   }
 `;
 
 export const Text = styled.p`
-  color: ${COLORS.dark};
-  font-size: 32px;
+  grid-area: code;
+  justify-self: flex-start;
+  color: ${COLORS.grey};
+  font-size: 24px;
+  font-weight: bold
   line-height: 1;
 `;
 
-const rotate = keyframes`
-from {
-    transform: rotate(0deg);
-}
-to {
-    transform: rotate(360deg);
-}
+export const CodeCell = styled.div`
+  display: inline-block;
+  font-size: 24px;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-left: 8px;
+  color: ${COLORS.grey};
+  background-color: ${COLORS.extraLightGrey}; 
 `;
 
-export const Cog = styled.img<{ side: 'left' | 'right' }>`
-  width: 50px;
-  height: 50px;
-  margin: 0 20px;
-  animation: ${rotate} linear 2s infinite;
-  animation-direction: ${(props) =>
-    props.side === 'left' ? 'normal' : 'reverse'};
-  justify-self: ${(props) => (props.side === 'left' ? 'end' : 'start')};
+export const CouponIcon = styled.img`
+  width: 25px;
+  margin: 0 6px -4px 0;
+  filter: invert(100%) invert(60%) sepia(3%) saturate(493%)
+    hue-rotate(194deg) brightness(94%) contrast(92%);
 `;
