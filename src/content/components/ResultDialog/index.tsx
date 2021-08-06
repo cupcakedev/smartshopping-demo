@@ -25,11 +25,11 @@ const ResultDialog = ({
       <Image src={botWithMoney} />
       <Text style={{ gridArea: 't1' }}>
         Cart total:{' '}
-        <span style={{ color: COLORS.primary }}>{' $' + priceWithDeal}</span>
+        <span style={{ color: COLORS.primary }}>{' $' + priceWithDeal.toFixed(2)}</span>
       </Text>
       <Text style={{ gridArea: 't2' }}>
         You saved:{' '}
-        <span style={{ color: COLORS.primary }}>{' $' + (initialPrice - priceWithDeal)}</span>
+        <span style={{ color: COLORS.primary }}>{' $' + (initialPrice - priceWithDeal).toFixed(2)}</span>
       </Text>
       <Text style={{ gridArea: 't3' }}>
         With code:{' '} <span style={{ color: COLORS.primary }}>{bestCode}</span>

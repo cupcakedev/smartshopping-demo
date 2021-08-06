@@ -43,7 +43,7 @@ const StartSlider = ({
         <span style={{ color: COLORS.primary }}>{promocodes}</span>
       </Text>
       <Text>
-        Cart total: <span style={{ color: COLORS.primary }}>{' $' + total}</span>
+        Cart total: <span style={{ color: COLORS.primary }}>{' $' + total.toFixed(2)}</span>
       </Text>
       <Start onClick={inspectOnly ? fadeout : start}>
         {inspectOnly ? 'Close' : 'Start'}
