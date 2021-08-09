@@ -7,9 +7,12 @@ chrome.runtime.onInstalled.addListener(() => {
   install();
   requireShops();
 });
-chrome.tabs.onUpdated.addListener(async (tabId) => {
-  const codes = await requirePromocodes(tabId);
-  process(tabId, codes).catch(() => {});
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (changeInfo.status === 'complete') {
+    console.log('updated');
+    const codes = await requirePromocodes(tabId);
+    process(tabId, codes).catch(() => {});
+  }
 });
 chrome.tabs.onReplaced.addListener(async (tabId) => {
   const codes = await requirePromocodes(tabId);

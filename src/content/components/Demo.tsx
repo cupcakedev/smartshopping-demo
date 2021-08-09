@@ -95,13 +95,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         setStage('APPLY');
         break;
       case 'APPLY-BEST_END':
-        console.log(bestCode);
-        console.log(engine.bestCode);
         setStage(engine.bestCode === '' ? 'FAIL' : 'SUCCESS');
-        console.log(checkoutState.total);
-        console.log(engine.checkoutState.total);
-        console.log(finalCost);
-        console.log(engine.finalCost);
         break;
       case 'CANCEL':
       case 'ERROR':
@@ -129,18 +123,26 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     };
   });
 
-  const test = () => engine.inspect();
-
   useEffect(() => {
-    if (Object.keys(engine.finalCost).length) {
+    console.log(stage);
+    console.log(engine.checkoutState.total);
+    if (engine.checkoutState.total) {
       setModalRootVisibility(true);
+    } else if (stage === 'IDLE') {
+      if (document.readyState === 'complete') {
+        engine.inspect();
+      } else {
+        const inspector = () => {
+          engine.inspect();
+          document.removeEventListener('load', inspector);
+        };
+        document.addEventListener('load', inspector);
+      }
     }
-    if (stage === 'IDLE') console.log('checkout');
   }, [stage, engine]);
 
   return (
     <>
-      <button onClick={test}>inspect</button>
       {stage === 'AWAIT' && (
         <SliderRoot>
           <GlobalStyle />

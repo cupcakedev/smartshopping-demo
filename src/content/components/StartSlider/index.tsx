@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import { COLORS } from '../constants';
-import headBot from '../../assets/headBot.png'
-import closeIcon from '../../assets/closeIcon.png'
+import headBot from '../../assets/headBot.png';
+import closeIcon from '../../assets/closeIcon.png';
 import { Grid, Header, Text, Start, Close, Image, CloseIcon } from './styles';
 
 interface IProps {
@@ -31,25 +31,26 @@ const StartSlider = ({
   return (
     <Grid fade={fade}>
       <Header>
-          <Image src={headBot} />
-          SmartShopping.ai
+        <Image src={headBot} />
+        SmartShopping.ai
       </Header>
       <Text>
-        Brand:{' '}
-        <span style={{ color: COLORS.primary }}>{shop}</span>
+        Brand: <span style={{ color: COLORS.primary }}>{shop}</span>
       </Text>
       <Text>
-        Coupons:{' '}
-        <span style={{ color: COLORS.primary }}>{promocodes}</span>
+        Coupons: <span style={{ color: COLORS.primary }}>{promocodes}</span>
       </Text>
       <Text>
-        Cart total: <span style={{ color: COLORS.primary }}>{' $' + total.toFixed(2)}</span>
+        Cart total:{' '}
+        <span style={{ color: COLORS.primary }}>
+          {' $' + total?.toFixed(2)}
+        </span>
       </Text>
       <Start onClick={inspectOnly ? fadeout : start}>
         {inspectOnly ? 'Close' : 'Start'}
       </Start>
       <Close onClick={fadeout}>
-          <CloseIcon src={closeIcon} />
+        <CloseIcon src={closeIcon} />
       </Close>
     </Grid>
   );
