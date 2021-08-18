@@ -61,7 +61,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
 
   // engine event listeners
   const configListener = (state: EngineConfig) => {
-    setShop(state.shopId);
+    setShop(state.shopName);
     setInspectOnly(state.apply.length === 0);
   };
   const checkoutStateListener = (state: EngineCheckoutState) => {
