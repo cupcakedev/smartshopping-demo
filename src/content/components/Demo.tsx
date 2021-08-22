@@ -22,6 +22,7 @@ import {
   EngineFinalCost,
   EngineConfig,
   EngineProgress,
+  EngineState,
 } from 'smartshopping-sdk';
 
 export const Demo = ({ engine }: { engine: Engine }) => {
@@ -60,32 +61,45 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   };
 
   // engine event listeners
-  const configListener = (state: EngineConfig) => {
-    setShop(state.shopName);
-    setInspectOnly(state.apply.length === 0);
+  const configListener = (value: EngineConfig) => {
+    setShop(value.shopName);
+    setInspectOnly(value.apply.length === 0);
   };
-  const checkoutStateListener = (state: EngineCheckoutState) => {
-    setCheckoutState(state);
+  const checkoutStateListener = (value: EngineCheckoutState) => {
+    setCheckoutState(value);
   };
-  const finalCostListener = (state: EngineFinalCost) => {
-    setFinalCost(state);
+  const finalCostListener = (value: EngineFinalCost) => {
+    setFinalCost(value);
   };
-  const promocodesListener = (state: Array<string>) => {
-    setPromocodes(state);
+  const promocodesListener = (value: Array<string>) => {
+    setPromocodes(value);
   };
-  const currentCodeListener = (state: string) => {
-    setCurrentCode(state);
+  const currentCodeListener = (value: string) => {
+    setCurrentCode(value);
   };
-  const bestCodeListener = (state: string) => {
-    setBestCode(state);
-  };
-
-  const checkoutListener = (state: boolean) => {
-    if (stage === 'INACTIVE') setStage(state ? 'IDLE' : 'INACTIVE');
+  const bestCodeListener = (value: string) => {
+    setBestCode(value);
   };
 
-  const progressListener = (state: EngineProgress) => {
-    switch (state) {
+  const checkoutListener = (value: boolean, state: EngineState) => {
+    if (stage === 'INACTIVE') setStage(value ? 'IDLE' : 'INACTIVE');
+    if (state.checkoutState.total) {
+      setModalRootVisibility(true);
+    } else if (value) {
+      if (document.readyState === 'complete') {
+        engine.inspect();
+      } else {
+        const inspector = () => {
+          engine.inspect();
+          document.removeEventListener('load', inspector);
+        };
+        document.addEventListener('load', inspector);
+      }
+    }
+  };
+
+  const progressListener = (value: EngineProgress, state: EngineState) => {
+    switch (value) {
       case 'INSPECT_END':
         setStage('AWAIT');
         break;
@@ -95,7 +109,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         setStage('APPLY');
         break;
       case 'APPLY-BEST_END':
-        setStage(engine.bestCode === '' ? 'FAIL' : 'SUCCESS');
+        setStage(state.bestCode === '' ? 'FAIL' : 'SUCCESS');
         break;
       case 'CANCEL':
       case 'ERROR':
@@ -121,25 +135,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     return () => {
       engine.unsubscribe(unbinders);
     };
-  });
-
-  useEffect(() => {
-    console.log(stage);
-    console.log(engine.checkoutState.total);
-    if (engine.checkoutState.total) {
-      setModalRootVisibility(true);
-    } else if (stage === 'IDLE') {
-      if (document.readyState === 'complete') {
-        engine.inspect();
-      } else {
-        const inspector = () => {
-          engine.inspect();
-          document.removeEventListener('load', inspector);
-        };
-        document.addEventListener('load', inspector);
-      }
-    }
-  }, [stage, engine]);
+  }, []);
 
   return (
     <>

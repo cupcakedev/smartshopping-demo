@@ -9,7 +9,6 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.status === 'complete') {
-    console.log('updated');
     const codes = await requirePromocodes(tabId);
     process(tabId, codes).catch(() => {});
   }
