@@ -1,10 +1,10 @@
 import { bootstrap } from 'smartshopping-sdk';
 import { requirePromocodes, requireShops } from '../utils';
 
-const clientID: string = 'demo';
-const key: string = 'very secret key';
-
-const { install, startEngine } = bootstrap({ clientID, key });
+const { install, startEngine } = bootstrap({
+  clientID: 'demo',
+  key: 'very secret key',
+});
 
 chrome.runtime.onInstalled.addListener(() => {
   install();

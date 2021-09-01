@@ -20,12 +20,15 @@ const ResultDialog = ({
   close,
 }: IProps) => (
   <>
-    <Grid>
+    <Grid data-test-role="result-dialog">
       <Header>Success!</Header>
       <Image src={botWithMoney} />
       <Text style={{ gridArea: 't1' }}>
         Cart total:{' '}
-        <span style={{ color: COLORS.primary }}>
+        <span
+          data-test-role="result-dialog__total"
+          style={{ color: COLORS.primary }}
+        >
           {' $' + priceWithDeal?.toFixed(2)}
         </span>
       </Text>
@@ -38,11 +41,19 @@ const ResultDialog = ({
       <Text style={{ gridArea: 't3' }}>
         With code: <span style={{ color: COLORS.primary }}>{bestCode}</span>
       </Text>
-      <MainButton onClick={close} style={{ gridArea: 'b' }}>
+      <MainButton
+        data-test-role="result-dialog__start-button"
+        onClick={close}
+        style={{ gridArea: 'b' }}
+      >
         Continue to checkout
       </MainButton>
     </Grid>
-    <CloseButton onClick={close} src={closeIcon} />
+    <CloseButton
+      data-test-role="result-dialog__close-button"
+      onClick={close}
+      src={closeIcon}
+    />
   </>
 );
 
