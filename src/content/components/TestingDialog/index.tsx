@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { COLORS } from 'src/content/components/constants';
-import couponIcon from '../../assets/couponIcon.png'
+import couponIcon from '../../assets/couponIcon.png';
 import { Grid, ProgressBar, Text, CodeCell, CouponIcon } from './styles';
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const TestingDialog = ({ code, current, totalAmount }: IProps) => (
-  <Grid>
+  <Grid data-test-role="testing-dialog">
     <ProgressBar value={current} max={totalAmount}></ProgressBar>
     <Text
       style={{
@@ -24,11 +24,11 @@ const TestingDialog = ({ code, current, totalAmount }: IProps) => (
       {current}/{totalAmount}
     </Text>
     <Text>
-        Testing code
-        <CodeCell>
-            <CouponIcon src={couponIcon} />
-            {code}
-        </CodeCell>
+      Testing code
+      <CodeCell>
+        <CouponIcon src={couponIcon} />
+        {code}
+      </CodeCell>
     </Text>
   </Grid>
 );

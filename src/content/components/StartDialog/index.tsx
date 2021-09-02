@@ -15,7 +15,11 @@ interface IProps {
 
 const StartDialog = ({ totalAmount, close, start }: IProps) => (
   <>
-    <CloseButton onClick={close} src={closeIcon} />
+    <CloseButton
+      data-test-role="start-dialog__close-button"
+      onClick={close}
+      src={closeIcon}
+    />
     <Grid>
       <Image src={botWithCoupon} />
       <Text
@@ -33,7 +37,9 @@ const StartDialog = ({ totalAmount, close, start }: IProps) => (
       <Text style={{ gridArea: 't2' }}>
         We searched high and low to make sure you get the best coupons
       </Text>
-      <MainButton onClick={start}>Apply coupons</MainButton>
+      <MainButton data-test-role="start-dialog__start-button" onClick={start}>
+        Apply coupons
+      </MainButton>
     </Grid>
   </>
 );

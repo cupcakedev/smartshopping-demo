@@ -42,14 +42,20 @@ const StartSlider = ({
       </Text>
       <Text>
         Cart total:{' '}
-        <span style={{ color: COLORS.primary }}>
+        <span
+          data-test-role="slart-slider__total"
+          style={{ color: COLORS.primary }}
+        >
           {' $' + total?.toFixed(2)}
         </span>
       </Text>
-      <Start onClick={inspectOnly ? fadeout : start}>
+      <Start
+        data-test-role="start-slider__start-button"
+        onClick={inspectOnly ? fadeout : start}
+      >
         {inspectOnly ? 'Close' : 'Start'}
       </Start>
-      <Close onClick={fadeout}>
+      <Close data-test-role="start-slider__close-button" onClick={fadeout}>
         <CloseIcon src={closeIcon} />
       </Close>
     </Grid>

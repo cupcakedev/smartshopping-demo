@@ -140,7 +140,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   return (
     <>
       {stage === 'AWAIT' && (
-        <SliderRoot>
+        <SliderRoot data-test-role="start-slider">
           <GlobalStyle />
           <StartSlider
             inspectOnly={inspectOnly}
@@ -153,7 +153,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         </SliderRoot>
       )}
       {['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage) && (
-        <ModalRoot visible={modalRootVisibility}>
+        <ModalRoot data-test-role="modal-root" visible={modalRootVisibility}>
           <GlobalStyle />
           <Container stage={stage}>
             <SmartShoppingLogo src={logo} />
