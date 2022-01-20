@@ -1,7 +1,7 @@
 {
-  "name": "SmartShopping Demo",
-  "short_name": "Demo",
-  "version": "1.0.0",
+  "name": "SmartShopping Demo MV3",
+  "short_name": "MV3 Demo",
+  "version": "1.2.0",
   "description": "Coupon Autoapply",
   "manifest_version": 3,
   "permissions": ["storage", "tabs"],
