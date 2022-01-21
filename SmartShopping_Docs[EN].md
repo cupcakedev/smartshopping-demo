@@ -15,7 +15,7 @@ Background script of extension using **SmartShopping SDK** might look like this:
 import { bootstrap } from 'smartshopping-sdk';
 import { requirePromocodes} from '../utils';
 
-const { install, process } = bootstrap({clientID: 'demo', key: 'very secret key'});
+const { install, startEngine } = bootstrap({clientID: 'demo', key: 'very secret key'});
 
 chrome.runtime.onInstalled.addListener(() => {
   install();
@@ -23,12 +23,12 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.status === 'complete') {
     const codes = await requirePromocodes(tabId);
-    process(tabId, codes);
+    startEngine(tabId, codes);
   }
 });
 chrome.tabs.onReplaced.addListener(async (tabId) => {
   const codes = await requirePromocodes(tabId);
-  process(tabId, codes);
+  startEngine(tabId, codes);
 });
 ```
 
@@ -38,10 +38,10 @@ It returns two functions:
 
 - `install: () => Promise<void>` uploads and stores merchants data; also sets up message passing between background and content parts of **SmartShopping**.
 
-- `process: (tabId: number, codes: Array<string>) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.  
-  Takes two arguments: browser tab ID and array of promocodes for testing.
+- `startEngine: <T = string>(tabId: number, codes: Array<T>, map?: (item: T) => string) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.  
+  Takes browser tab ID and array of promocodes as an arguments. It is also possible to provide array of any type and third optional parameter – map function that will transform this array into array of code strings.
 
-In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `process`.
+In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `startEngine`.
 
 #### Content Script
 
@@ -64,10 +64,13 @@ There are 3 stages:
 
 All three stages can be executed consistently via `engine.fullCycle()`.
 
+Execution can be aborted via `engine.abort()` method.
+
 Config object looks like this:
 
 ```
 type EngineConfig {
+  version: number;
   shopId: string;
   shopName: string;
   shopUrl: string;
@@ -75,8 +78,11 @@ type EngineConfig {
   inspect: Array<Command>;
   apply: Array<Command>;
   applyBest: Array<Command>;
+  selectorsToCheck: Array<string>;
 }
 ```
+
+- `version` – version of config spec for intrinsic usage
 
 - `shopId` – merchant's unique ID in **SmartShopping** database
 
@@ -87,6 +93,8 @@ type EngineConfig {
 - `checkoutUrl` – RegEx matching merchant's checkout page
 
 - `inspect`, `apply` and `applyBest` – arrays of commands for respective stages of auto apply flow.
+
+- `selectorsToCheck` – array of selectors which are necessary to proceed. If any of them are invalid, execution stops with an error.
 
 `engine` stores info in the following properties:
 
