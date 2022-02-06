@@ -5,65 +5,62 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-module.exports = (env) => {
-  const mode = env.mode || 'prod';
-  return {
-    mode: mode === 'dev' ? 'development' : 'production',
-    entry: {
-      background: `${__dirname}/src/background/index.ts`,
-      content: `${__dirname}/src/content/index.tsx`,
-    },
-    output: {
-      publicPath: '',
-      path: path.resolve(__dirname, 'dist'),
-      filename: '[name]-bundle.js',
-    },
-    module: {
-      rules: [
+module.exports = () => ({
+  mode: 'production',
+  entry: {
+    background: `${__dirname}/src/background/index.ts`,
+    content: `${__dirname}/src/content/index.tsx`,
+  },
+  output: {
+    publicPath: '',
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name]-bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.(?:ico|gif|png|svg|jpg|jpeg|woff2)$/i,
+        loader: 'url-loader',
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    plugins: [new TsconfigPathsPlugin({})],
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
         {
-          test: /\.tsx?$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
+          from: './manifest.json',
+          force: true,
         },
         {
-          test: /\.(?:ico|gif|png|svg|jpg|jpeg|woff2)$/i,
-          loader: 'url-loader',
-        },
-        {
-          test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          from: './src/content/assets/smartshoppingIcon.png',
         },
       ],
-    },
-    resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
-      plugins: [new TsconfigPathsPlugin({})],
-    },
-    plugins: [
-      new CleanWebpackPlugin(),
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: './manifest.json',
-            force: true,
+    }),
+  ],
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          format: {
+            comments: false,
           },
-          {
-            from: './src/content/assets/smartshoppingIcon.png',
-          },
-        ],
+        },
+        extractComments: false,
       }),
     ],
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            format: {
-              comments: false,
-            },
-          },
-          extractComments: false,
-        }),
-      ],
-    },
-  };
-};
+  },
+});

@@ -195,3 +195,5 @@ interface EngineState {
   checkout: boolean;
 }
 ```
+
+### Statistics
