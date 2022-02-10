@@ -38,8 +38,8 @@ It returns two functions:
 
 - `install: () => Promise<void>` uploads and stores merchants data; also sets up message passing between background and content parts of **SmartShopping**.
 
-- `startEngine: <T = string>(tabId: number, codes: Array<T>, map?: (item: T) => string) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.  
-  Takes browser tab ID and array of promocodes as an arguments. It is also possible to provide array of any type and third optional parameter – map function that will transform this array into array of code strings.
+- `startEngine: (tabId: number, codes: string[]) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.  
+  Takes browser tab ID and array of promocodes as an arguments.
 
 In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `startEngine`.
 
@@ -195,5 +195,3 @@ interface EngineState {
   checkout: boolean;
 }
 ```
-
-### Statistics
