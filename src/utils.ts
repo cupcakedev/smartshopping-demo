@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api2.smartshopping.ai/demo';
+const API_BASE_URL = 'https://api.smartshopping.ai/demo';
 
 const localstoreSet = (items: Object): Promise<any> => {
   const promise = new Promise<void>((resolve, reject) => {

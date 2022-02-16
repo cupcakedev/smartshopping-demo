@@ -7,6 +7,8 @@
 
 ### Integration
 
+"storage", "tabs" and "alarms" permissions required
+
 #### Background script
 
 Background script of extension using **SmartShopping SDK** might look like this:
