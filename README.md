@@ -1,3 +1,7 @@
+## Demo capabilities
+
+Demo extension works with five merchants only – ASOS, MyProtein, Shein, Dell and Sephora
+
 ## SmartShopping SDK
 
 ### Installation
