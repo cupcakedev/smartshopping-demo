@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from 'src/content/components/constants';
+import { COLORS } from 'src/constants';
 
 export const Grid = styled.div`
   position: relative;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { COLORS } from 'src/content/components/constants';
+import { COLORS } from 'src/constants';
 import couponIcon from '../../assets/couponIcon.png';
 import { Grid, ProgressBar, Text, CodeCell, CouponIcon } from './styles';
 

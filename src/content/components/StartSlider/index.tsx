@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { COLORS } from '../constants';
+import { COLORS } from '../../../constants';
 import headBot from '../../assets/headBot.png';
 import closeIcon from '../../assets/closeIcon.png';
 import { Grid, Header, Text, Start, Close, Image, CloseIcon } from './styles';

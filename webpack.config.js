@@ -10,6 +10,7 @@ module.exports = () => ({
   entry: {
     background: `${__dirname}/src/background/index.ts`,
     content: `${__dirname}/src/content/index.tsx`,
+    popup: `${__dirname}/src/popup/index.tsx`,
   },
   output: {
     publicPath: '',
@@ -47,6 +48,10 @@ module.exports = () => ({
         },
         {
           from: './src/content/assets/smartshoppingIcon.png',
+        },
+        {
+          from: './src/popup/popup.html',
+          force: true,
         },
       ],
     }),

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { COLORS } from 'src/content/components/constants';
+import { COLORS } from 'src/constants';
 import { CloseButton, MainButton } from '../styled_components';
 import { Grid, Text, Header, Image } from './styles';
 import closeIcon from '../../assets/closeIcon.png';

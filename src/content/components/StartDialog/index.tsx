@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { COLORS } from '../constants';
+import { COLORS } from '../../../constants';
 import botWithCoupon from '../../assets/botWithCoupon.png';
 import closeIcon from '../../assets/closeIcon.png';
 

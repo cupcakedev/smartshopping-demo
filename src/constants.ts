@@ -7,3 +7,8 @@ export const COLORS = {
   extraLightGrey: '#EFF0F2',
   white: '#FFF'
 };
+
+export const API_URL = {
+  dev: 'https://api.smartshopping.ai/test/demo',
+  prod: 'https://api.smartshopping.ai/demo',
+}

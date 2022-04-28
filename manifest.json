@@ -19,7 +19,8 @@
     "extension_pages": "script-src 'self'; object-src 'self';"
   },
   "action": {
-    "default_icon": "smartshoppingIcon.png"
+    "default_icon": "smartshoppingIcon.png",
+    "default_popup": "popup.html"
   },
   "icons": {
     "16": "smartshoppingIcon.png",

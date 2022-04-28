@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api.smartshopping.ai/demo';
+import { API_URL } from "./constants";
 
 const localstoreSet = (items: Object): Promise<any> => {
   const promise = new Promise<void>((resolve, reject) => {
@@ -43,7 +43,9 @@ const tabsGet = (tabId: number): Promise<any> => {
 };
 
 export async function requireShops() {
-  const response = await fetch(`${API_BASE_URL}/shops`);
+  const storageData = await localstoreGet(['env_isDevConfigs']);
+  const apiUrl = storageData?.env_isDevConfigs ? API_URL.dev : API_URL.prod;
+  const response = await fetch(`${apiUrl}/shops`);
   const shops = await response.json();
   await localstoreSet({ demoShops: shops });
 }
@@ -53,8 +55,9 @@ export async function requirePromocodes(id: number): Promise<Array<string>> {
   if (!activeTab) return [];
   const url = activeTab.pendingUrl || activeTab.url || '';
 
-  const storageData = await localstoreGet(['demoShops']);
+  const storageData = await localstoreGet(['demoShops', 'env_isDevConfigs']);
   if (!storageData.demoShops) return [];
+  const apiUrl = storageData?.env_isDevConfigs ? API_URL.dev : API_URL.prod;
 
   const locatedShop = storageData.demoShops.find(
     (shop: { id: string; urlPattern: string }) => {
@@ -64,7 +67,7 @@ export async function requirePromocodes(id: number): Promise<Array<string>> {
   );
   if (!locatedShop) return [];
 
-  const response = await fetch(`${API_BASE_URL}/${locatedShop.id}`);
+  const response = await fetch(`${apiUrl}/${locatedShop.id}`);
   const promocodes = await response.json();
   return promocodes;
 }

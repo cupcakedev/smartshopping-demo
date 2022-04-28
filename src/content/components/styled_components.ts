@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import root from 'react-shadow/styled-components';
 
-import { COLORS } from './constants';
+import { COLORS } from '../../constants';
 
 export const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
