@@ -59,7 +59,25 @@ export const Text = styled.p`
 export const Start = styled.button`
   width: 300px;
   height: 50px;
-  margin: 0 20px 34px 20px;
+  margin: 0 20px 0 20px;
+  border: none;
+  border-radius: 12px;
+  background-color: ${COLORS.primary};
+  color: ${COLORS.white};
+  font-size: 14px;
+  line-height: 14px;
+  cursor: pointer;
+  align-self: center;
+  transition: background-color 0.1s;
+  &:hover {
+    background-color: ${COLORS.secondary};
+  }
+`;
+
+export const Detect = styled.button`
+  width: 300px;
+  height: 50px;
+  margin: 15px 20px 34px 20px;
   border: none;
   border-radius: 12px;
   background-color: ${COLORS.primary};

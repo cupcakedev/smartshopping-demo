@@ -14,6 +14,7 @@ import {
   SliderRoot,
   Container,
   SmartShoppingLogo,
+  TooltipRoot,
 } from './styled_components';
 
 import {
@@ -24,13 +25,20 @@ import {
   EngineProgress,
   EngineState,
 } from 'smartshopping-sdk';
+import { DetectTooltip } from './DetectTooltip';
+
+export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED' | 'FAILED';
 
 export const Demo = ({ engine }: { engine: Engine }) => {
   const [stage, setStage] = useState<
     'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
-  >('INACTIVE');
+    >('INACTIVE');
+  
+  const [detectStage, setDetectStage] = useState<TDetectStage>('INACTIVE')
 
   const [shop, setShop] = useState<string>('');
+  const [isDetectAvailable, setIsDetectAvailable] = useState<boolean>(false);
+  const [isDevConfigs, setIsDevConfigs] = useState<boolean>(false);
   const [checkoutState, setCheckoutState] = useState<EngineCheckoutState>({
     total: null,
   });
@@ -38,11 +46,19 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const [promocodes, setPromocodes] = useState<Array<string>>([]);
   const [currentCode, setCurrentCode] = useState<string>('');
   const [bestCode, setBestCode] = useState<string>('');
+  const [userCode, setUserCode] = useState<string>('');
 
   const [inspectOnly, setInspectOnly] = useState<boolean>(false);
 
   const [modalRootVisibility, setModalRootVisibility] =
     useState<boolean>(false);
+  
+  chrome.storage.local.get(
+    ['env_isDevConfigs'],
+    (items) => {
+      setIsDevConfigs(items.env_isDevConfigs);
+    }
+  );
 
   const closeSlider = () => setStage('INACTIVE');
   const closeModal = async () => {
@@ -59,11 +75,24 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     await engine.apply();
     await engine.applyBest();
   };
+  const activateDetect = async () => {
+    closeSlider();
+    setDetectStage('STARTED')
+    try {
+      await engine.detect();
+      setDetectStage('COUPON-EXTRACTED')
+    } catch (e) {
+      console.log('Detect failed, error - ', e);
+      setDetectStage('FAILED');
+    }
+
+  }
 
   // engine event listeners
   const configListener = (value: EngineConfig) => {
     setShop(value.shopName);
     setInspectOnly(value.apply.length === 0);
+    setIsDetectAvailable(value.detect.length > 0)
   };
   const checkoutStateListener = (value: EngineCheckoutState) => {
     setCheckoutState(value);
@@ -79,6 +108,9 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   };
   const bestCodeListener = (value: string) => {
     setBestCode(value);
+  };
+  const userCodeListener = (value: string) => {
+    setUserCode(value);
   };
 
   const checkoutListener = (value: boolean, state: EngineState) => {
@@ -99,6 +131,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   };
 
   const progressListener = (value: EngineProgress, state: EngineState) => {
+    console.log('progressListener - ', value)
     switch (value) {
       case 'INSPECT_END':
         if (state.checkoutState.total) setStage('AWAIT');
@@ -131,6 +164,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
       progress: progressListener,
       currentCode: currentCodeListener,
       bestCode: bestCodeListener,
+      userCode: userCodeListener,
       checkout: checkoutListener,
     });
     return () => {
@@ -150,8 +184,19 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             promocodes={promocodes.length}
             shop={shop}
             total={checkoutState.total as number}
+            activateDetect={activateDetect}
+            isDetectButtonVisible={isDetectAvailable && isDevConfigs}
           />
         </SliderRoot>
+      )}
+      {detectStage !=='INACTIVE' && (
+        <TooltipRoot data-test-role="detect-tooltip" visible={true}>
+          <GlobalStyle />
+          <DetectTooltip
+            userCode={userCode}
+            detectStage={detectStage}
+          />
+        </TooltipRoot>
       )}
       {['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage) && (
         <ModalRoot data-test-role="modal-root" visible={modalRootVisibility}>
