@@ -10,9 +10,8 @@ interface IProps {
 }
 
 const DetectTooltip = ({ userCode, detectStage }: IProps) => (
-  <Container data-test-role="detect-tooltip">
-    
-    <Text>
+  <Container stage={detectStage} data-test-role="detect-tooltip">
+    <Text stage={detectStage}>
       {detectStage === 'INACTIVE' && 'Detect inactive'}
       {detectStage === 'STARTED' && 'Detect started'}
       {detectStage === 'COUPON-EXTRACTED' && `Coupon extracted - ${userCode}`}

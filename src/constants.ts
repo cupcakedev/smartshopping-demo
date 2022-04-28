@@ -5,7 +5,9 @@ export const COLORS = {
   grey: '#8F9096',
   lightGrey: '#BABEC6',
   extraLightGrey: '#EFF0F2',
-  white: '#FFF'
+  white: '#FFF',
+  green: 'green',
+  red: 'red',
 };
 
 export const API_URL = {
