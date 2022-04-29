@@ -10,7 +10,12 @@ export const COLORS = {
   red: 'red',
 };
 
-export const API_URL = {
+export const API_SERVER_URL = {
+  dev: 'https://api.smartshopping.ai/test',
+  prod: 'https://api.smartshopping.ai',
+}
+
+export const API_DEMO_URL = {
   dev: 'https://api.smartshopping.ai/test/demo',
   prod: 'https://api.smartshopping.ai/demo',
 }

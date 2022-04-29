@@ -1,4 +1,4 @@
-import { API_URL } from "./constants";
+import { API_DEMO_URL } from "./constants";
 
 const localstoreSet = (items: Object): Promise<any> => {
   const promise = new Promise<void>((resolve, reject) => {
@@ -44,12 +44,12 @@ const tabsGet = (tabId: number): Promise<any> => {
 
 export async function getApiUrl() {
   const storageData = await localstoreGet(['env_isDevMod']);
-  const apiUrl = storageData?.env_isDevMod ? API_URL.dev : API_URL.prod;
+  const apiUrl = storageData?.env_isDevMod ? API_DEMO_URL.dev : API_DEMO_URL.prod;
   return apiUrl;
 }
 
 export async function requireShops() {
-  const apiUrl = getApiUrl();
+  const apiUrl = await getApiUrl();
   const response = await fetch(`${apiUrl}/shops`);
   const shops = await response.json();
   await localstoreSet({ demoShops: shops });
@@ -62,7 +62,7 @@ export async function requirePromocodes(id: number): Promise<Array<string>> {
 
   const storageData = await localstoreGet(['demoShops']);
   if (!storageData.demoShops) return [];
-  const apiUrl = getApiUrl();
+  const apiUrl = await getApiUrl();
 
   const locatedShop = storageData.demoShops.find(
     (shop: { id: string; urlPattern: string }) => {
