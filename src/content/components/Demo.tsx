@@ -130,7 +130,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   };
 
   const progressListener = (value: EngineProgress, state: EngineState) => {
-    console.log('progressListener - ', value)
     switch (value) {
       case 'INSPECT_END':
         if (state.checkoutState.total) setStage('AWAIT');

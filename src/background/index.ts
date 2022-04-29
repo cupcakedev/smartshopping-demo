@@ -4,6 +4,7 @@ import { requirePromocodes, requireShops } from '../utils';
 const { install, startEngine } = bootstrap({
   clientID: 'demo',
   key: 'very secret key',
+  serverUrl: 'https://api.smartshopping.ai/test/demo',
 });
 
 chrome.runtime.onInstalled.addListener(() => {

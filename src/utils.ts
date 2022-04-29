@@ -42,9 +42,14 @@ const tabsGet = (tabId: number): Promise<any> => {
   return promise;
 };
 
-export async function requireShops() {
+export async function getApiUrl() {
   const storageData = await localstoreGet(['env_isDevMod']);
   const apiUrl = storageData?.env_isDevMod ? API_URL.dev : API_URL.prod;
+  return apiUrl;
+}
+
+export async function requireShops() {
+  const apiUrl = getApiUrl();
   const response = await fetch(`${apiUrl}/shops`);
   const shops = await response.json();
   await localstoreSet({ demoShops: shops });
@@ -55,9 +60,9 @@ export async function requirePromocodes(id: number): Promise<Array<string>> {
   if (!activeTab) return [];
   const url = activeTab.pendingUrl || activeTab.url || '';
 
-  const storageData = await localstoreGet(['demoShops', 'env_isDevMod']);
+  const storageData = await localstoreGet(['demoShops']);
   if (!storageData.demoShops) return [];
-  const apiUrl = storageData?.env_isDevMod ? API_URL.dev : API_URL.prod;
+  const apiUrl = getApiUrl();
 
   const locatedShop = storageData.demoShops.find(
     (shop: { id: string; urlPattern: string }) => {
