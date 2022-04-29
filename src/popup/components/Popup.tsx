@@ -15,7 +15,7 @@ export const Popup = () => {
     chrome.storage.local.get(
       ['env_isDevMod'],
       (items) => {
-        setIsDevMod(items.env_isDevMod);
+        setIsDevMod(!!items?.env_isDevMod);
       }
     );
     chrome.storage.onChanged.addListener(storageChangeHandler);

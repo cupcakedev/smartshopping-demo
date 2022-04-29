@@ -1,6 +1,6 @@
-import { API_DEMO_URL } from "./constants";
+import { API_URL } from "./constants";
 
-const localstoreSet = (items: Object): Promise<any> => {
+export const localstoreSet = (items: Object): Promise<any> => {
   const promise = new Promise<void>((resolve, reject) => {
     chrome.storage.local.set(items, () => {
       const err = chrome.runtime.lastError;
@@ -14,7 +14,7 @@ const localstoreSet = (items: Object): Promise<any> => {
   return promise;
 };
 
-const localstoreGet = (keys: Array<string>): Promise<any> => {
+export const localstoreGet = (keys: Array<string>): Promise<any> => {
   const promise = new Promise((resolve, reject) => {
     chrome.storage.local.get(keys, (items) => {
       const err = chrome.runtime.lastError;
@@ -44,13 +44,13 @@ const tabsGet = (tabId: number): Promise<any> => {
 
 export async function getApiUrl() {
   const storageData = await localstoreGet(['env_isDevMod']);
-  const apiUrl = storageData?.env_isDevMod ? API_DEMO_URL.dev : API_DEMO_URL.prod;
+  const apiUrl = storageData?.env_isDevMod ? API_URL.dev : API_URL.prod;
   return apiUrl;
 }
 
 export async function requireShops() {
   const apiUrl = await getApiUrl();
-  const response = await fetch(`${apiUrl}/shops`);
+  const response = await fetch(`${apiUrl}/demo/shops`);
   const shops = await response.json();
   await localstoreSet({ demoShops: shops });
 }
@@ -72,7 +72,7 @@ export async function requirePromocodes(id: number): Promise<Array<string>> {
   );
   if (!locatedShop) return [];
 
-  const response = await fetch(`${apiUrl}/${locatedShop.id}`);
+  const response = await fetch(`${apiUrl}/demo/${locatedShop.id}`);
   const promocodes = await response.json();
   return promocodes;
 }

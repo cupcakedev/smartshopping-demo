@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { COLORS } from '../../../constants';
 import headBot from '../../assets/headBot.png';
 import closeIcon from '../../assets/closeIcon.png';
-import { Grid, Header, Text, Start, Close, Image, CloseIcon, Detect } from './styles';
+import { Grid, Header, Text, Start, Close, Image, CloseIcon, DetectIcon } from './styles';
+import { TDetectStage } from '../Demo';
 
 interface IProps {
   inspectOnly: boolean;
@@ -12,8 +13,7 @@ interface IProps {
   promocodes: number;
   total: number;
   shop: string;
-  activateDetect: () => void;
-  isDetectButtonVisible: boolean;
+  isDetectStarted: boolean;
 }
 
 const StartSlider = ({
@@ -23,8 +23,7 @@ const StartSlider = ({
   shop,
   close,
   start,
-  activateDetect,
-  isDetectButtonVisible
+  isDetectStarted,
 }: IProps) => {
   const [fade, setFade] = useState<'in' | 'out'>('in');
   const fadeout = async () => {
@@ -53,20 +52,15 @@ const StartSlider = ({
           {' $' + total?.toFixed(2)}
         </span>
       </Text>
+      {isDetectStarted && (
+        <Text>Detect started <DetectIcon /></Text>
+      )}
       <Start
         data-test-role="start-slider__start-button"
         onClick={inspectOnly ? fadeout : start}
       >
         {inspectOnly ? 'Close' : 'Start'}
       </Start>
-      {isDetectButtonVisible && (
-        <Detect
-          data-test-role="start-slider__detect-button"
-          onClick={activateDetect}
-        >
-          Detect
-        </Detect>
-      )}
       <Close data-test-role="start-slider__close-button" onClick={fadeout}>
         <CloseIcon src={closeIcon} />
       </Close>

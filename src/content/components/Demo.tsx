@@ -76,7 +76,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     await engine.applyBest();
   };
   const activateDetect = async () => {
-    closeSlider();
     setDetectStage('STARTED')
     try {
       await engine.detect();
@@ -170,25 +169,31 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isDevMod && isDetectAvailable && detectStage === 'INACTIVE' && stage ==='AWAIT' && promocodes.length === 0) {
+      activateDetect();
+    }
+    console.log('promocodes - ', promocodes.length )
+  }, [isDevMod, isDetectAvailable, stage, promocodes]);
+
   return (
     <>
       {stage === 'AWAIT' && (
         <SliderRoot data-test-role="start-slider">
           <GlobalStyle />
           <StartSlider
-            inspectOnly={inspectOnly}
+            inspectOnly={inspectOnly || promocodes.length === 0}
             start={activateFlow}
             close={closeSlider}
             promocodes={promocodes.length}
             shop={shop}
             total={checkoutState.total as number}
-            activateDetect={activateDetect}
-            isDetectButtonVisible={isDetectAvailable && isDevMod}
+            isDetectStarted={detectStage === 'STARTED'}
           />
         </SliderRoot>
       )}
-      {detectStage !=='INACTIVE' && (
-        <TooltipRoot data-test-role="detect-tooltip" visible={true}>
+      {(detectStage === 'COUPON-EXTRACTED' || detectStage === 'FAILED') && (
+        <TooltipRoot data-test-role="detect-tooltip">
           <GlobalStyle />
           <DetectTooltip
             userCode={userCode}

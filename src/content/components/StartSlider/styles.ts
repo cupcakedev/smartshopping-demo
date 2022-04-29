@@ -19,6 +19,15 @@ const fadeOut = keyframes`
   }
 `;
 
+const blink = keyframes`
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+`;
+
 export const Grid = styled.div<{ fade: 'in' | 'out' }>`
   position: relative;
   width: 340px;
@@ -30,7 +39,7 @@ export const Grid = styled.div<{ fade: 'in' | 'out' }>`
   color: ${COLORS.grey};
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 50px 50px 50px 1fr;
+  grid-template-rows: auto;
   align-items: center;
   animation: ${(props) =>
     props.fade === 'in'
@@ -59,25 +68,7 @@ export const Text = styled.p`
 export const Start = styled.button`
   width: 300px;
   height: 50px;
-  margin: 0 20px 0 20px;
-  border: none;
-  border-radius: 12px;
-  background-color: ${COLORS.primary};
-  color: ${COLORS.white};
-  font-size: 14px;
-  line-height: 14px;
-  cursor: pointer;
-  align-self: center;
-  transition: background-color 0.1s;
-  &:hover {
-    background-color: ${COLORS.secondary};
-  }
-`;
-
-export const Detect = styled.button`
-  width: 300px;
-  height: 50px;
-  margin: 15px 20px 34px 20px;
+  margin: 0 20px 34px 20px;
   border: none;
   border-radius: 12px;
   background-color: ${COLORS.primary};
@@ -116,4 +107,14 @@ export const CloseIcon = styled.img`
   &:hover {
     transform: scale(1.2);
   }
+`;
+
+export const DetectIcon = styled.div`
+  width: 15px;
+  height: 15px;
+  background-color: green;
+  border-radius: 50%;
+  margin-left: 5px;
+  animation: ${blink} 2s linear infinite;
+  display: inline-block;
 `;
