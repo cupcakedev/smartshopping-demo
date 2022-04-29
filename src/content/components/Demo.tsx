@@ -14,7 +14,6 @@ import {
   SliderRoot,
   Container,
   SmartShoppingLogo,
-  TooltipRoot,
 } from './styled_components';
 
 import {
@@ -25,7 +24,6 @@ import {
   EngineProgress,
   EngineState,
 } from 'smartshopping-sdk';
-import { DetectTooltip } from './DetectTooltip';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED' | 'FAILED';
 
@@ -80,9 +78,11 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     try {
       await engine.detect();
       setDetectStage('COUPON-EXTRACTED')
+      if (stage === 'INACTIVE') setStage('AWAIT')
     } catch (e) {
       console.log('Detect failed, error - ', e);
       setDetectStage('FAILED');
+      if (stage === 'INACTIVE') setStage('AWAIT')
     }
   }
 
@@ -173,7 +173,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     if (isDevMod && isDetectAvailable && detectStage === 'INACTIVE' && stage ==='AWAIT' && promocodes.length === 0) {
       activateDetect();
     }
-    console.log('promocodes - ', promocodes.length )
   }, [isDevMod, isDetectAvailable, stage, promocodes]);
 
   return (
@@ -188,18 +187,10 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             promocodes={promocodes.length}
             shop={shop}
             total={checkoutState.total as number}
-            isDetectStarted={detectStage === 'STARTED'}
-          />
-        </SliderRoot>
-      )}
-      {(detectStage === 'COUPON-EXTRACTED' || detectStage === 'FAILED') && (
-        <TooltipRoot data-test-role="detect-tooltip">
-          <GlobalStyle />
-          <DetectTooltip
             userCode={userCode}
             detectStage={detectStage}
           />
-        </TooltipRoot>
+        </SliderRoot>
       )}
       {['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage) && (
         <ModalRoot data-test-role="modal-root" visible={modalRootVisibility}>

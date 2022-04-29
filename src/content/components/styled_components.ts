@@ -83,17 +83,6 @@ export const ModalRoot = styled(root.div)<{ visible: boolean }>`
   transition: opacity 0.5s;
 `;
 
-export const TooltipRoot = styled(root.div)`
-  position: fixed;
-  z-index: 50000;
-  top: 5px;
-  right: 24px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  transition: width 0.3s, height 0.3s;
-`;
-
 export const Container = styled.div<{ stage: string }>`
   position: relative;
   width: ${(props) =>

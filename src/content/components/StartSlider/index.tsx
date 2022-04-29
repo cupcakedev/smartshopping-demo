@@ -13,7 +13,8 @@ interface IProps {
   promocodes: number;
   total: number;
   shop: string;
-  isDetectStarted: boolean;
+  detectStage: TDetectStage;
+  userCode: string;
 }
 
 const StartSlider = ({
@@ -23,7 +24,8 @@ const StartSlider = ({
   shop,
   close,
   start,
-  isDetectStarted,
+  detectStage,
+  userCode,
 }: IProps) => {
   const [fade, setFade] = useState<'in' | 'out'>('in');
   const fadeout = async () => {
@@ -31,6 +33,7 @@ const StartSlider = ({
     await new Promise((resolve) => setTimeout(resolve, 1000));
     close();
   };
+
   return (
     <Grid fade={fade}>
       <Header>
@@ -52,8 +55,14 @@ const StartSlider = ({
           {' $' + total?.toFixed(2)}
         </span>
       </Text>
-      {isDetectStarted && (
+      {detectStage === 'STARTED' && (
         <Text>Detect started <DetectIcon /></Text>
+      )}
+      {detectStage === 'COUPON-EXTRACTED' && (
+        <Text>Coupon extracted - {userCode}</Text>
+      )}
+      {detectStage === 'FAILED' && (
+        <Text>Detect failed</Text>
       )}
       <Start
         data-test-role="start-slider__start-button"
