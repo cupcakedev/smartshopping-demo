@@ -38,7 +38,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
 
   const [shop, setShop] = useState<string>('');
   const [isDetectAvailable, setIsDetectAvailable] = useState<boolean>(false);
-  const [isDevConfigs, setIsDevConfigs] = useState<boolean>(false);
+  const [isDevMod, setIsDevMod] = useState<boolean>(false);
   const [checkoutState, setCheckoutState] = useState<EngineCheckoutState>({
     total: null,
   });
@@ -54,9 +54,9 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     useState<boolean>(false);
   
   chrome.storage.local.get(
-    ['env_isDevConfigs'],
+    ['env_isDevMod'],
     (items) => {
-      setIsDevConfigs(items.env_isDevConfigs);
+      setIsDevMod(items.env_isDevMod);
     }
   );
 
@@ -85,7 +85,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
       console.log('Detect failed, error - ', e);
       setDetectStage('FAILED');
     }
-
   }
 
   // engine event listeners
@@ -185,7 +184,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             shop={shop}
             total={checkoutState.total as number}
             activateDetect={activateDetect}
-            isDetectButtonVisible={isDetectAvailable && isDevConfigs}
+            isDetectButtonVisible={isDetectAvailable && isDevMod}
           />
         </SliderRoot>
       )}

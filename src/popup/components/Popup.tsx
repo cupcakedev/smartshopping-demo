@@ -3,19 +3,19 @@ import { requireShops } from 'src/utils';
 import { Container, Button } from './styled_components';
 
 export const Popup = () => {
-  const [isDevConfigs, setIsDevConfigs] = useState<boolean>(false);
+  const [isDevMod, setIsDevMod] = useState<boolean>(false);
 
   const storageChangeHandler = (changes: {
     [key: string]: chrome.storage.StorageChange;
   }) => {
-    if ('env_isDevConfigs' in changes) setIsDevConfigs(changes.env_isDevConfigs.newValue);
+    if ('env_isDevMod' in changes) setIsDevMod(changes.env_isDevMod.newValue);
   };
 
   useEffect(() => {
     chrome.storage.local.get(
-      ['env_isDevConfigs'],
+      ['env_isDevMod'],
       (items) => {
-        setIsDevConfigs(items.env_isDevConfigs);
+        setIsDevMod(items.env_isDevMod);
       }
     );
     chrome.storage.onChanged.addListener(storageChangeHandler);
@@ -27,10 +27,10 @@ export const Popup = () => {
   return (
     <Container>
       <Button
-        enabled={isDevConfigs}
-        onClick={() => chrome.storage.local.set({ env_isDevConfigs: !isDevConfigs })}
+        enabled={isDevMod}
+        onClick={() => chrome.storage.local.set({ env_isDevMod: !isDevMod })}
       >
-        Dev configs
+        Dev mode
       </Button>
     </Container>
   );

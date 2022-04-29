@@ -11,7 +11,7 @@ chrome.runtime.onInstalled.addListener(() => {
   requireShops();
 });
 chrome.storage.onChanged.addListener((changes) => {
-  if ('env_isDevConfigs' in changes) requireShops();
+  if ('env_isDevMod' in changes) requireShops();
 });
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.status === 'complete') {
