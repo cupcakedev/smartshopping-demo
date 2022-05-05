@@ -54,7 +54,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   chrome.storage.local.get(
     ['env_isDevMod'],
     (items) => {
-      setIsDevMod(items.env_isDevMod);
+      setIsDevMod(!!items?.env_isDevMod);
     }
   );
 
@@ -90,7 +90,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const configListener = (value: EngineConfig) => {
     setShop(value.shopName);
     setInspectOnly(value.apply.length === 0);
-    setIsDetectAvailable(value.detect.length > 0)
+    if (value?.detect) setIsDetectAvailable(value?.detect?.length > 0)
   };
   const checkoutStateListener = (value: EngineCheckoutState) => {
     setCheckoutState(value);
