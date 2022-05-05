@@ -81,7 +81,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     } catch (e) {
       setDetectStage('FAILED');
     } finally {
-      if (stage === 'INACTIVE') setStage('AWAIT')
+      setStage('AWAIT')
     }
   }
 
