@@ -78,10 +78,9 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     try {
       await engine.detect();
       setDetectStage('COUPON-EXTRACTED')
-      if (stage === 'INACTIVE') setStage('AWAIT')
     } catch (e) {
-      console.log('Detect failed, error - ', e);
       setDetectStage('FAILED');
+    } finally {
       if (stage === 'INACTIVE') setStage('AWAIT')
     }
   }
