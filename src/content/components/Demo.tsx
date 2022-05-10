@@ -24,8 +24,9 @@ import {
   EngineProgress,
   EngineState,
 } from 'smartshopping-sdk';
+import { localstoreGet } from 'src/utils';
 
-export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED' | 'FAILED';
+export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 
 export const Demo = ({ engine }: { engine: Engine }) => {
   const [stage, setStage] = useState<
@@ -35,8 +36,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const [detectStage, setDetectStage] = useState<TDetectStage>('INACTIVE')
 
   const [shop, setShop] = useState<string>('');
-  const [isDetectAvailable, setIsDetectAvailable] = useState<boolean>(false);
-  const [isDevMod, setIsDevMod] = useState<boolean>(false);
   const [checkoutState, setCheckoutState] = useState<EngineCheckoutState>({
     total: null,
   });
@@ -50,13 +49,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
 
   const [modalRootVisibility, setModalRootVisibility] =
     useState<boolean>(false);
-  
-  chrome.storage.local.get(
-    ['env_isDevMod'],
-    (items) => {
-      setIsDevMod(!!items?.env_isDevMod);
-    }
-  );
 
   const closeSlider = () => setStage('INACTIVE');
   const closeModal = async () => {
@@ -73,23 +65,11 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     await engine.apply();
     await engine.applyBest();
   };
-  const activateDetect = async () => {
-    setDetectStage('STARTED')
-    try {
-      await engine.detect();
-      setDetectStage('COUPON-EXTRACTED')
-    } catch (e) {
-      setDetectStage('FAILED');
-    } finally {
-      setStage('AWAIT')
-    }
-  }
 
   // engine event listeners
   const configListener = (value: EngineConfig) => {
     setShop(value.shopName);
     setInspectOnly(value.apply.length === 0);
-    if (value?.detect) setIsDetectAvailable(value?.detect?.length > 0)
   };
   const checkoutStateListener = (value: EngineCheckoutState) => {
     setCheckoutState(value);
@@ -110,7 +90,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     setUserCode(value);
   };
 
-  const checkoutListener = (value: boolean, state: EngineState) => {
+  const checkoutListener = async (value: boolean, state: EngineState) => {
     if (stage === 'INACTIVE') setStage(value ? 'IDLE' : 'INACTIVE');
     if (state.checkoutState.total) {
       setModalRootVisibility(true);
@@ -123,6 +103,25 @@ export const Demo = ({ engine }: { engine: Engine }) => {
           document.removeEventListener('load', inspector);
         };
         document.addEventListener('load', inspector);
+      }
+
+      if (!state.config?.detect) return;
+
+      const isDetectAvailable = state.config?.detect?.length > 0;
+      const storageData = await localstoreGet(['env_isDevMod']);
+      const isDevMod = !!storageData?.env_isDevMod;
+      const isPromocodesEmpty = state.promocodes.length === 0;
+
+      if (isDevMod && isDetectAvailable && isPromocodesEmpty) {
+        if (document.readyState === 'complete') {
+          engine.detect();
+        } else {
+          const detector = () => {
+            document.removeEventListener('load', detector);
+            engine.detect();
+          };
+          document.addEventListener('load', detector);
+        }
       }
     }
   };
@@ -140,6 +139,13 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         break;
       case 'APPLY-BEST_END':
         setStage(state.bestCode === '' ? 'FAIL' : 'SUCCESS');
+        break;
+      case 'DETECT':
+        setDetectStage('STARTED');
+        break;
+      case 'DETECT_END':
+        setDetectStage('COUPON-EXTRACTED');
+        setStage('AWAIT');
         break;
       case 'CANCEL':
       case 'ERROR':
@@ -167,12 +173,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
       engine.unsubscribe(unbinders);
     };
   }, []);
-
-  useEffect(() => {
-    if (isDevMod && isDetectAvailable && detectStage === 'INACTIVE' && stage ==='AWAIT' && promocodes.length === 0) {
-      activateDetect();
-    }
-  }, [isDevMod, isDetectAvailable, stage, promocodes]);
 
   return (
     <>

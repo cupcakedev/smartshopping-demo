@@ -61,9 +61,6 @@ const StartSlider = ({
       {detectStage === 'COUPON-EXTRACTED' && (
         <Text>Coupon extracted - {userCode}</Text>
       )}
-      {detectStage === 'FAILED' && (
-        <Text>Detect failed</Text>
-      )}
       <Start
         data-test-role="start-slider__start-button"
         onClick={inspectOnly ? fadeout : start}
