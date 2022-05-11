@@ -38,7 +38,7 @@ chrome.tabs.onReplaced.addListener(async (tabId) => {
 });
 ```
 
-`bootstrap` takes two arguments – client ID and secret key, which is used for data decryption. If you dont know your ID and secret key, contact **SmartShopping** tech support.
+`bootstrap` takes three arguments – client ID, secret key (which is used for data decryption) and optional - serverUrl (not used by default). If you dont know your ID and secret key, contact **SmartShopping** tech support.
 
 It returns two functions:
 
@@ -59,8 +59,9 @@ import { Engine } from 'smartshopping-sdk';
 const engine = new Engine();
 ```
 
-`engine` receives config object from background script and manages coupon autoapply flow.
-There are 3 stages:
+`engine` receives config object from background script and manages coupon autoapply flow and detect a successful coupon.
+
+Coupon autoapply flow stages:
 
 1. `engine.inspect()` – analyzing checkout page and collecting information;
 
@@ -69,6 +70,8 @@ There are 3 stages:
 3. `engine.applyBest()` – choosing and applying best promocode;
 
 All three stages can be executed consistently via `engine.fullCycle()`.
+
+Detect stage - `engine.detect()` – detect and extract a successful coupon;
 
 Execution can be aborted via `engine.abort()` method.
 
@@ -82,6 +85,7 @@ type EngineConfig {
   shopUrl: string;
   checkoutUrl: string;
   inspect: Array<Command>;
+  detect: Array<Command>;
   apply: Array<Command>;
   applyBest: Array<Command>;
   selectorsToCheck: Array<string>;
@@ -97,6 +101,8 @@ type EngineConfig {
 - `shopUrl` – RegEx matching all merchant's URLs
 
 - `checkoutUrl` – RegEx matching merchant's checkout page
+
+- `detect` – arrays of commands to detect and extract a successful coupon.
 
 - `inspect`, `apply` and `applyBest` – arrays of commands for respective stages of auto apply flow.
 
@@ -114,6 +120,8 @@ type EngineConfig {
   | 'IDLE'
   | 'INSPECT'
   | 'INSPECT_END'
+  | 'DETECT'
+  | 'DETECT_END'
   | 'APPLY'
   | 'APPLY_END'
   | 'APPLY-BEST'
@@ -146,7 +154,10 @@ type EngineFinalCost = { [key: string]: number }
 7. `bestCode: string`
    Most profitable promocode
    If none of the codes worked, `bestCode === ''`
-8. `checkout: boolean`
+8. `userCode: string`
+   Successfully applied user promocode
+   If the user has not entered a promo code, `userCode === ''`
+9. `checkout: boolean`
    Flag for being on checkout page
 
 You can subscribe to those properties' changes via `engine.subscribe()`...
@@ -161,6 +172,7 @@ const unbinders = engine.subscribe(
       progress: progressListener,
       currentCode: currentCodeListener,
       bestCode: bestCodeListener,
+      userCode: userCodeListener,
       checkout: checkoutListener,
     }
 );
@@ -198,6 +210,7 @@ interface EngineState {
   promocodes: Array<string>;
   bestCode: string;
   currentCode: string;
+  userCode: string,
   checkout: boolean;
 }
 ```
