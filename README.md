@@ -59,7 +59,7 @@ import { Engine } from 'smartshopping-sdk';
 const engine = new Engine();
 ```
 
-`engine` receives config object from background script and manages coupon autoapply flow and detect a successful coupon.
+`engine` receives config object from background script and manages coupon autoapply flow or detect a successful coupon.
 
 Coupon autoapply flow stages:
 
@@ -156,7 +156,8 @@ type EngineFinalCost = { [key: string]: number }
    If none of the codes worked, `bestCode === ''`
 8. `userCode: string`
    Successfully applied user promocode
-   If the user has not entered a promo code, `userCode === ''`
+   If the user did not enter the code, `userCode === ''`
+   If we can determine that the user entered the correct promo code, but we cannot get the value of the code, `userCode === 'UNDEFINED_CODE'`
 9. `checkout: boolean`
    Flag for being on checkout page
 
