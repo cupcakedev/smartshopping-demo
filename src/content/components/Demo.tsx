@@ -129,8 +129,12 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const progressListener = (value: EngineProgress, state: EngineState) => {
     switch (value) {
       case 'INSPECT_END':
-        if (state.checkoutState.total) setStage('AWAIT');
-        else setStage('INACTIVE');
+        if (state.checkoutState.total) {
+          setStage('AWAIT');
+          engine.notifyAboutShowModal();
+        } else {
+          setStage('INACTIVE');
+        }
         break;
       case 'APPLY':
       case 'APPLY_END':

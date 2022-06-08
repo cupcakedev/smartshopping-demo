@@ -1,6 +1,6 @@
 ## Demo capabilities
 
-Demo extension works with five merchants only – ASOS, MyProtein, Shein, Dell and Sephora
+Demo extension works with five merchants only – ASOS, MyProtein, Shein, Dell and Emma
 
 ## SmartShopping SDK
 
@@ -74,6 +74,8 @@ All three stages can be executed consistently via `engine.fullCycle()`.
 Detect stage - `engine.detect()` – detect and extract a successful coupon;
 
 Execution can be aborted via `engine.abort()` method.
+
+Since you have control over when your extension's modal is shown, call the `engine.notifyAboutShowModal()` method before showing so we can get these statistics.
 
 Config object looks like this:
 
