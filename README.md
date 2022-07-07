@@ -21,7 +21,7 @@ Background script of extension using **SmartShopping SDK** might look like this:
 import { bootstrap } from 'smartshopping-sdk';
 import { requirePromocodes} from '../utils';
 
-const { install, startEngine } = bootstrap({clientID: 'demo', key: 'very secret key'});
+const { install, startEngine } = bootstrap({ clientID: 'demo', key: 'very secret key' });
 
 chrome.runtime.onInstalled.addListener(() => {
   install();
@@ -71,11 +71,13 @@ Coupon autoapply flow stages:
 
 All three stages can be executed consistently via `engine.fullCycle()`.
 
-Detect stage - `engine.detect()` – detect and extract a successful coupon;
+Detect stage - `engine.detect()` – detects if a user tried to apply a coupon;
 
-Execution can be aborted via `engine.abort()` method.
+The execution of the stages: `detect`, `apply`, `applyBest` can be aborted using the `engine.abort()` method.
 
-Since you have control over when your extension's modal is shown, call the `engine.notifyAboutShowModal()` method before showing so we can get these statistics.
+Since it is up to you to show the modal window with the suggestion to apply coupons, call the `engine.notifyAboutShowModal()` method before it is shown so that we can get these statistics.
+
+And if the user closes the modal prompting them to apply codes, call the `engine.notifyAboutCloseModal()` method.
 
 Config object looks like this:
 
@@ -153,13 +155,14 @@ type EngineFinalCost = { [key: string]: number }
    Array of promocodes for testing
 6. `currentCode: string`
    Promocode currently being processed
-7. `bestCode: string`
+7. `userCode: string`
+   Promocode entered by the user
+   If the user did not enter the code, `userCode === ''`
+   `userCode === 'UNDEFINED_CODE'` if the user tried to enter an invalid promo code or a valid one but we can't get its value
+   In other cases, `userCode` will contain a valid applied promotional code
+8. `bestCode: string`
    Most profitable promocode
    If none of the codes worked, `bestCode === ''`
-8. `userCode: string`
-   Successfully applied user promocode
-   If the user did not enter the code, `userCode === ''`
-   If we can determine that the user entered the correct promo code, but we cannot get the value of the code, `userCode === 'UNDEFINED_CODE'`
 9. `checkout: boolean`
    Flag for being on checkout page
 
@@ -217,3 +220,10 @@ interface EngineState {
   checkout: boolean;
 }
 ```
+
+<details>
+  <summary>Flowchart of an example of integrating Smartshopping SDK into your extension</summary>
+  
+  ![Integration example](smartshopping_integration_caa.png)
+  
+</details>
