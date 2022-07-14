@@ -50,7 +50,10 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const [modalRootVisibility, setModalRootVisibility] =
     useState<boolean>(false);
 
-  const closeSlider = () => setStage('INACTIVE');
+  const closeSlider = () => {
+    setStage('INACTIVE');
+    engine.notifyAboutCloseModal();
+  }
   const closeModal = async () => {
     setModalRootVisibility(false);
     await new Promise((resolve) => setTimeout(resolve, 500));
