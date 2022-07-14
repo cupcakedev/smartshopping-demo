@@ -63,6 +63,10 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     await closeModal();
     engine.notifyAboutCloseModal();
   }
+  const closeTestingModal = async () => {
+    engine.abort();
+    await closeModal();
+  }
   const activateFlow = async () => {
     setStage('READY');
     await new Promise((resolve) => setTimeout(resolve));
@@ -219,6 +223,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
                 code={currentCode}
                 current={promocodes.indexOf(currentCode) + 1}
                 totalAmount={promocodes.length}
+                close={closeTestingModal}
               />
             )}
             {stage === 'SUCCESS' && (
