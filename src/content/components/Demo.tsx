@@ -59,6 +59,10 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setStage('INACTIVE');
   };
+  const closeStartModal = async () => {
+    await closeModal();
+    engine.notifyAboutCloseModal();
+  }
   const activateFlow = async () => {
     setStage('READY');
     await new Promise((resolve) => setTimeout(resolve));
@@ -206,7 +210,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             {stage === 'READY' && (
               <StartDialog
                 start={start}
-                close={closeModal}
+                close={closeStartModal}
                 totalAmount={promocodes.length}
               />
             )}
