@@ -1,7 +1,6 @@
 import { bootstrap } from 'smartshopping-sdk';
 import { getApiUrl, requirePromocodes, requireShops } from '../utils';
 
-
 (async () => {
   const serverUrl = await getApiUrl();
   const { install, startEngine } = bootstrap({
@@ -32,4 +31,3 @@ import { getApiUrl, requirePromocodes, requireShops } from '../utils';
   
   chrome.storage.onChanged.addListener(storageChangeHandler);
 })();
-
