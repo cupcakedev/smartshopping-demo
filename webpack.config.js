@@ -1,21 +1,25 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-
+const { EnvironmentPlugin } = require('webpack');
+const ExtReloader = require('webpack-ext-reloader');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { merge } = require('webpack-merge');
 
-module.exports = () => ({
+const productionConfig = {
   mode: 'production',
   entry: {
-    background: `${__dirname}/src/background/index.ts`,
-    content: `${__dirname}/src/content/index.tsx`,
-    popup: `${__dirname}/src/popup/index.tsx`,
+    background: `${__dirname}/src/pages/background/index.ts`,
+    content: `${__dirname}/src/pages/content/index.tsx`,
+    popup: `${__dirname}/src/pages/popup/index.tsx`,
+    options: `${__dirname}/src/pages/options/index.tsx`,
   },
   output: {
     publicPath: '',
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name]-bundle.js',
+    filename: '[name].js',
+    clean: true,
   },
   module: {
     rules: [
@@ -25,32 +29,51 @@ module.exports = () => ({
         exclude: /node_modules/,
       },
       {
-        test: /\.(?:ico|gif|png|svg|jpg|jpeg|woff2)$/i,
+        test: /\.(?:ico|gif|png|svg|jpg|jpeg)$/i,
         loader: 'url-loader',
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(woff(2)?|ttf|eo)$/,
+        loader: 'url-loader',
+      },
     ],
   },
+  devtool: 'source-map',
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    plugins: [new TsconfigPathsPlugin({})],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    plugins: [
+      new TsconfigPathsPlugin({
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      }),
+    ],
+    alias: {
+      react: path.resolve('./node_modules/react'),
+    },
   },
   plugins: [
-    new CleanWebpackPlugin(),
+    new EnvironmentPlugin(['EXTENSION_NAME_PREFIX']),
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: './manifest.json',
+          from: './src/manifest.json',
           force: true,
         },
         {
-          from: './src/content/assets/smartshoppingIcon.png',
+          context: './src/assets/images',
+          from: '*.png',
+          to: 'images',
+          force: true,
         },
         {
-          from: './src/popup/popup.html',
+          from: './src/pages/popup/popup.html',
+          force: true,
+        },
+        {
+          from: './src/pages/options/options.html',
           force: true,
         },
       ],
@@ -68,4 +91,16 @@ module.exports = () => ({
       }),
     ],
   },
-});
+};
+
+const devConfig = {
+  mode: 'development',
+  plugins: [new BundleAnalyzerPlugin()],
+};
+
+module.exports = (env) => {
+  if (env.development) {
+    return merge(productionConfig, devConfig);
+  }
+  return productionConfig;
+};
