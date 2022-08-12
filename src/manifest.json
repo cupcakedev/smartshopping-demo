@@ -6,11 +6,11 @@
   "manifest_version": 3,
   "permissions": ["storage", "tabs", "alarms"],
   "background": {
-    "service_worker": "background-bundle.js"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "js": ["content-bundle.js"],
+      "js": ["content.js"],
       "matches": ["<all_urls>"],
       "run_at": "document_end"
     }
@@ -19,12 +19,12 @@
     "extension_pages": "script-src 'self'; object-src 'self';"
   },
   "action": {
-    "default_icon": "smartshoppingIcon.png",
+    "default_icon": "/images/smartshoppingIcon.png",
     "default_popup": "popup.html"
   },
   "icons": {
-    "16": "smartshoppingIcon.png",
-    "48": "smartshoppingIcon.png",
-    "128": "smartshoppingIcon.png"
+    "16": "/images/smartshoppingIcon.png",
+    "48": "/images/smartshoppingIcon.png",
+    "128": "/images/smartshoppingIcon.png"
   }
 }
