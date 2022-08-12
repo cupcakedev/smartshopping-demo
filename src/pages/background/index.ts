@@ -1,5 +1,6 @@
 import { bootstrap } from 'smartshopping-sdk';
 import { getApiUrl, requirePromocodes, requireShops } from '../../utils/utils';
+import {LocalStorageKeys} from "../../storage/config";
 
 (async () => {
   const serverUrl = await getApiUrl();
@@ -11,6 +12,14 @@ import { getApiUrl, requirePromocodes, requireShops } from '../../utils/utils';
 
   requireShops();
   install();
+
+  /* Triggered an error when closing a tab:
+   *
+   * Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true,
+   * but the message channel closed before a response was received
+   *
+   * Probably it is internal SDK error in startEngine()
+   * */
 
   chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
     if (changeInfo.status === 'complete') {
@@ -26,7 +35,7 @@ import { getApiUrl, requirePromocodes, requireShops } from '../../utils/utils';
   const storageChangeHandler = (changes: {
     [key: string]: chrome.storage.StorageChange;
   }) => {
-    if ('env_isDevMod' in changes) chrome.runtime.reload();
+    if (LocalStorageKeys.isDevMod in changes) chrome.runtime.reload();
   };
 
   chrome.storage.onChanged.addListener(storageChangeHandler);
