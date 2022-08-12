@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { COLORS } from 'src/constants';
-import couponIcon from '../../assets/couponIcon.png';
-import closeIcon from '../../assets/closeIcon.png';
+import { COLORS } from 'src/constants/constants';
+import couponIcon from '../../../../assets/images/couponIcon.png';
+import closeIcon from '../../../../assets/images/closeIcon.png';
 import { CloseButton } from '../styled_components';
 import { Grid, ProgressBar, Text, CodeCell, CouponIcon } from './styles';
 

@@ -1,5 +1,5 @@
 import { bootstrap } from 'smartshopping-sdk';
-import { getApiUrl, requirePromocodes, requireShops } from '../utils';
+import { getApiUrl, requirePromocodes, requireShops } from '../../utils/utils';
 
 (async () => {
   const serverUrl = await getApiUrl();
@@ -28,6 +28,6 @@ import { getApiUrl, requirePromocodes, requireShops } from '../utils';
   }) => {
     if ('env_isDevMod' in changes) chrome.runtime.reload();
   };
-  
+
   chrome.storage.onChanged.addListener(storageChangeHandler);
 })();

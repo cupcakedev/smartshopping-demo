@@ -1,4 +1,4 @@
-import { API_URL } from "./constants";
+import { API_URL } from "../constants/constants";
 
 export const localstoreSet = (items: Object): Promise<any> => {
   const promise = new Promise<void>((resolve, reject) => {

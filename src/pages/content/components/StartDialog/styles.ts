@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from 'src/constants';
+import { COLORS } from 'src/constants/constants';
 
 export const Grid = styled.div`
   width: 660px;

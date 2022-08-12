@@ -6,7 +6,7 @@ import { NoDealsDialog } from './NoDealsDialog';
 import { TestingDialog } from './TestingDialog';
 import { ResultDialog } from './ResultDialog';
 
-import logo from '../assets/smartshoppingLogo.png';
+import logo from '../../../assets/images/smartshoppingLogo.png';
 
 import {
   GlobalStyle,
@@ -24,7 +24,7 @@ import {
   EngineProgress,
   EngineState,
 } from 'smartshopping-sdk';
-import { localstoreGet } from 'src/utils';
+import { localstoreGet } from 'src/utils/utils';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 
@@ -32,7 +32,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
   const [stage, setStage] = useState<
     'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
     >('INACTIVE');
-  
+
   const [detectStage, setDetectStage] = useState<TDetectStage>('INACTIVE')
 
   const [shop, setShop] = useState<string>('');

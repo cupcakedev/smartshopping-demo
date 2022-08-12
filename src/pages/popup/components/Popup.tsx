@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { requireShops } from 'src/utils';
+import { requireShops } from 'src/utils/utils';
 import { Container, Button } from './styled_components';
 
 export const Popup = () => {

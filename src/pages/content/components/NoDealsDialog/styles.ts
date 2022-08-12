@@ -1,26 +1,23 @@
 import styled from 'styled-components';
-import { COLORS } from 'src/constants';
+import { COLORS } from 'src/constants/constants';
 
 export const Grid = styled.div`
-  position: relative;
   width: 660px;
   height: 300px;
   padding: 8px 0 0 40px;
   display: grid;
-  grid-template-columns: 330px 330px;
-  grid-template-rows: 60px 45px 45px 45px 80px;
+  grid-template-columns: 350px 310px;
+  grid-template-rows: 80px 90px 80px;
   grid-template-areas:
     'h i'
     't1 i'
-    't2 i'
-    't3 i'
-    'b .';
+    'b i';
   place-items: center;
 `;
 
 export const Header = styled.p`
   grid-area: h;
-  font-size: 25px;
+  font-size: 24px;
   justify-self: start;
   font-weight: bold;
   color: ${COLORS.primary};
