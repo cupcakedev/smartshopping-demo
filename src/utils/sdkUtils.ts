@@ -1,33 +1,5 @@
 import { API_URL } from "../constants/constants";
 
-export const localstoreSet = (items: Object): Promise<any> => {
-  const promise = new Promise<void>((resolve, reject) => {
-    chrome.storage.local.set(items, () => {
-      const err = chrome.runtime.lastError;
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
-  return promise;
-};
-
-export const localstoreGet = (keys: Array<string>): Promise<any> => {
-  const promise = new Promise((resolve, reject) => {
-    chrome.storage.local.get(keys, (items) => {
-      const err = chrome.runtime.lastError;
-      if (err) {
-        reject(err);
-      } else {
-        resolve(items);
-      }
-    });
-  });
-  return promise;
-};
-
 const tabsGet = (tabId: number): Promise<any> => {
   const promise = new Promise((resolve, reject) => {
     chrome.tabs.get(tabId, (tab) => {
