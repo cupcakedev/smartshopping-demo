@@ -24,11 +24,13 @@ import {
     EngineProgress,
     EngineState,
 } from 'smartshopping-sdk';
-import { localstoreGet } from 'src/utils/sdkUtils';
+import { useChromeStorage } from 'src/hooks/useChromeStorage';
+import { LocalStorageKeys } from 'src/storage/config';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 
 export const Demo = ({ engine }: { engine: Engine }) => {
+    const [isDevMod] = useChromeStorage(LocalStorageKeys.isDevMod);
     const [stage, setStage] = useState<
         'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
     >('INACTIVE');
@@ -119,8 +121,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             if (!state.config?.detect) return;
 
             const isDetectAvailable = state.config?.detect?.length > 0;
-            const storageData = await localstoreGet(['env_isDevMod']);
-            const isDevMod = !!storageData?.env_isDevMod;
             const isPromocodesEmpty = state.promocodes.length === 0;
 
             if (isDevMod && isDetectAvailable && isPromocodesEmpty) {
