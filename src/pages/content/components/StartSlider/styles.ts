@@ -3,19 +3,19 @@ import { COLORS } from '../../../../constants/constants';
 
 const fadeIn = keyframes`
   from {
-    right: -360px;
+    transform: translateX(360px);
   }
   to {
-    right: 0;
+    transform: translateX(0px);
   }
 `;
 
 const fadeOut = keyframes`
   from {
-    right: 0px;
+    transform: translateX(0px);
   }
   to {
-    right: -360px;
+    transform: translateX(360px);
   }
 `;
 
