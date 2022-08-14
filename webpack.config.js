@@ -13,7 +13,6 @@ const productionConfig = {
         background: `${__dirname}/src/pages/background/index.ts`,
         content: `${__dirname}/src/pages/content/index.tsx`,
         popup: `${__dirname}/src/pages/popup/index.tsx`,
-        options: `${__dirname}/src/pages/options/index.tsx`,
     },
     output: {
         publicPath: '',
@@ -70,10 +69,6 @@ const productionConfig = {
                 },
                 {
                     from: './src/pages/popup/popup.html',
-                    force: true,
-                },
-                {
-                    from: './src/pages/options/options.html',
                     force: true,
                 },
             ],
