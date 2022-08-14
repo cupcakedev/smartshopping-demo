@@ -1,21 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
+
+import '../../logger';
 import { Engine } from 'smartshopping-sdk';
 import { Demo } from './components/Demo';
 
-try {
+const injection = document.createElement('div');
+injection.classList.add('smartshop-injection');
+document.body.appendChild(injection);
+
+async function injectEntryPoint() {
     const engine = new Engine();
-
-    const injection = document.createElement('div');
-    injection.classList.add('smartshop-injection');
-    document.body.appendChild(injection);
-
-    ReactDOM.render(
-        <>
-            <Demo engine={engine} />
-        </>,
-        injection
-    );
-} catch (e) {
-    console.log(e);
+    ReactDOM.createRoot(injection).render(<Demo engine={engine} />);
 }
+
+injectEntryPoint()
+    .then()
+    .catch((e) => console.log(e));
