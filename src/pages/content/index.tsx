@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import '../../logger';
+import 'src/logger';
 import { Engine } from 'smartshopping-sdk';
-import { Demo } from './components/Demo';
+import { Demo } from '@content/components/Demo';
 
 const injection = document.createElement('div');
 injection.classList.add('smartshop-injection');

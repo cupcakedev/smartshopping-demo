@@ -1,6 +1,6 @@
 import { LocalStorageKeys, storage } from 'src/storage/config';
-import { tabsGet } from 'src/utils/tabUtils';
-import { API_URL } from '../constants/constants';
+import { tabsGet } from '@utils/tabUtils';
+import { API_URL } from '@constants/api';
 
 export async function getApiUrl() {
     const storageData = await storage.any.get([LocalStorageKeys.isDevMod]);

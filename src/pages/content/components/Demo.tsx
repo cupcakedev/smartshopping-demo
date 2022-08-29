@@ -6,7 +6,7 @@ import { NoDealsDialog } from './NoDealsDialog';
 import { TestingDialog } from './TestingDialog';
 import { ResultDialog } from './ResultDialog';
 
-import logo from '../../../assets/images/smartshoppingLogo.png';
+import logo from '@assets/images/smartshoppingLogo.png';
 
 import {
     GlobalStyle,
@@ -14,7 +14,7 @@ import {
     SliderRoot,
     Container,
     SmartShoppingLogo,
-} from './styled_components';
+} from './styles';
 
 import {
     Engine,

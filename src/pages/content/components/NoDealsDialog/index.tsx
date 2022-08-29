@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { CloseButton, MainButton } from '../styled_components';
+import { CloseButton, MainButton } from '../styles';
 import { Grid, Text, Header, Image } from './styles';
-import closeIcon from '../../../../assets/images/closeIcon.png';
-import botWithMoney from '../../../../assets/images/botWithMoney.png';
+import closeIcon from '@assets/images/closeIcon.png';
+import botWithMoney from '@assets/images/botWithMoney.png';
 
 interface IProps {
     close: () => void;

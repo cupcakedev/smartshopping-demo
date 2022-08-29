@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { COLORS } from '../../../../constants/constants';
-import botWithCoupon from '../../../../assets/images/botWithCoupon.png';
-import closeIcon from '../../../../assets/images/closeIcon.png';
+import { COLORS } from '@constants/theme';
+import botWithCoupon from '@assets/images/botWithCoupon.png';
+import closeIcon from '@assets/images/closeIcon.png';
 
-import { CloseButton, MainButton } from '../styled_components';
+import { CloseButton, MainButton } from '../styles';
 import { Grid, Image, Text } from './styles';
 
 interface IProps {

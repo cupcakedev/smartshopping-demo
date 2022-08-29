@@ -1,14 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import { COLORS } from 'src/constants/constants';
-
-const fadeIn = keyframes`
-from {
-    opacity: 0;
-}
-to {
-    opacity: 1;
-}
-`;
+import { COLORS } from '@constants/theme';
 
 export const Grid = styled.div`
     display: grid;

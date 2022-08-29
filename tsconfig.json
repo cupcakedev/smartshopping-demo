@@ -7,7 +7,7 @@
     "noEmitOnError": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "lib": ["dom", "es2018"],
     "allowJs": true,
     "jsx": "react",
@@ -16,7 +16,13 @@
     "types": ["chrome", "node", "webpack-env", "jest"],
     "paths": {
       "@assets/*": ["src/assets/*"],
+      "@background/*": ["src/pages/background/*"],
       "@common/*": ["src/common/*"],
+      "@constants/*": ["src/constants/*"],
+      "@content/*": ["src/pages/content/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@popup/*": ["src/pages/popup/*"],
+      "@utils/*": ["src/utils/*"],
       "src/*": ["src/*"]
     }
   },

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { COLORS } from '../../../../constants/constants';
-import headBot from '../../../../assets/images/headBot.png';
-import closeIcon from '../../../../assets/images/closeIcon.png';
+import { COLORS } from '@constants/theme';
+import headBot from '@assets/images/headBot.png';
+import closeIcon from '@assets/images/closeIcon.png';
 import {
     Grid,
     Header,

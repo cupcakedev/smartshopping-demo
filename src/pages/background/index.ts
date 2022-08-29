@@ -1,10 +1,6 @@
 import { bootstrap } from 'smartshopping-sdk';
-import {
-    getApiUrl,
-    requirePromocodes,
-    requireShops,
-} from '../../utils/sdkUtils';
-import { LocalStorageKeys } from '../../storage/config';
+import { getApiUrl, requirePromocodes, requireShops } from '@utils/sdkUtils';
+import { LocalStorageKeys } from 'src/storage/config';
 
 (async () => {
     const serverUrl = await getApiUrl();

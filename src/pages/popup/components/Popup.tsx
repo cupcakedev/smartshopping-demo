@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Container, Button } from './styled_components';
-import { useChromeStorage } from 'src/hooks/useChromeStorage';
+import React, { useCallback } from 'react';
+import { Container, Button } from './styles';
+import { useChromeStorage } from '@hooks/useChromeStorage';
 import { LocalStorageKeys } from 'src/storage/config';
 
 export const Popup = () => {

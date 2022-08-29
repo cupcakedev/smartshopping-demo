@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { COLORS } from 'src/constants/constants';
-import couponIcon from '../../../../assets/images/couponIcon.png';
-import closeIcon from '../../../../assets/images/closeIcon.png';
-import { CloseButton } from '../styled_components';
+import { COLORS } from '@constants/theme';
+import couponIcon from '@assets/images/couponIcon.png';
+import closeIcon from '@assets/images/closeIcon.png';
+import { CloseButton } from '../styles';
 import { Grid, ProgressBar, Text, CodeCell, CouponIcon } from './styles';
 
 interface IProps {
