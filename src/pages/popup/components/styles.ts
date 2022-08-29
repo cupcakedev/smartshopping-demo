@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from 'src/constants/constants';
+import { COLORS } from '@constants/theme';
 
 const Container = styled.div`
     margin: 20px;
