@@ -13,14 +13,6 @@ import { LocalStorageKeys } from 'src/storage/config';
     requireShops();
     install();
 
-    /* Triggered an error when closing a tab:
-     *
-     * Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true,
-     * but the message channel closed before a response was received
-     *
-     * Probably it is internal SDK error in startEngine()
-     * */
-
     chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
         if (changeInfo.status === 'complete') {
             const codes = await requirePromocodes(tabId);
