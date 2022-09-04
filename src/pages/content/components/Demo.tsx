@@ -22,15 +22,12 @@ import {
     EngineFinalCost,
     EngineConfig,
     EngineProgress,
-    EngineState,
+    EngineState, EngineDetectState,
 } from 'smartshopping-sdk';
-import { useChromeStorage } from 'src/hooks/useChromeStorage';
-import { LocalStorageKeys } from 'src/storage/config';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 
 export const Demo = ({ engine }: { engine: Engine }) => {
-    const [isDevMod] = useChromeStorage(LocalStorageKeys.isDevMod);
     const [stage, setStage] = useState<
         'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
     >('INACTIVE');
@@ -46,6 +43,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     const [currentCode, setCurrentCode] = useState<string>('');
     const [bestCode, setBestCode] = useState<string>('');
     const [userCode, setUserCode] = useState<string>('');
+    const [isValidCode, setIsValidCode] = useState<boolean | null>(null);
 
     const [inspectOnly, setInspectOnly] = useState<boolean>(false);
 
@@ -99,8 +97,9 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     const bestCodeListener = (value: string) => {
         setBestCode(value);
     };
-    const userCodeListener = (value: string) => {
-        setUserCode(value);
+    const detectStateListener = (value: EngineDetectState) => {
+        setUserCode(value.userCode);
+        setIsValidCode(value.isValid);
     };
 
     const checkoutListener = async (value: boolean, state: EngineState) => {
@@ -123,7 +122,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             const isDetectAvailable = state.config?.detect?.length > 0;
             const isPromocodesEmpty = state.promocodes.length === 0;
 
-            if (isDevMod && isDetectAvailable && isPromocodesEmpty) {
+            if (isDetectAvailable && isPromocodesEmpty) {
                 if (document.readyState === 'complete') {
                     engine.detect();
                 } else {
@@ -181,7 +180,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             progress: progressListener,
             currentCode: currentCodeListener,
             bestCode: bestCodeListener,
-            userCode: userCodeListener,
+            detectState: detectStateListener,
             checkout: checkoutListener,
         });
         return () => {
