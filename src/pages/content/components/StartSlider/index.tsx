@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { COLORS } from '@constants/theme';
 import headBot from '@assets/images/headBot.png';
 import closeIcon from '@assets/images/closeIcon.png';
+import validIcon from '@assets/images/valid.png';
+import invalidIcon from '@assets/images/invalid.png';
 import {
     Grid,
     Header,
@@ -12,6 +14,7 @@ import {
     Image,
     CloseIcon,
     DetectIcon,
+    ValidationImage,
 } from './styles';
 import { TDetectStage } from '../Demo';
 
@@ -24,6 +27,7 @@ interface IProps {
     shop: string;
     detectStage: TDetectStage;
     userCode: string;
+    isUserCodeValid: boolean;
 }
 
 const StartSlider = ({
@@ -35,6 +39,7 @@ const StartSlider = ({
     start,
     detectStage,
     userCode,
+    isUserCodeValid,
 }: IProps) => {
     const [fade, setFade] = useState<'in' | 'out'>('in');
     const fadeout = async () => {
@@ -71,7 +76,7 @@ const StartSlider = ({
                 </Text>
             )}
             {detectStage === 'COUPON-EXTRACTED' && (
-                <Text>Coupon extracted - {userCode}</Text>
+                <Text>Coupon extracted - {userCode} <ValidationImage src={isUserCodeValid ? validIcon : invalidIcon}/></Text>
             )}
             <Start
                 data-test-role="start-slider__start-button"

@@ -43,7 +43,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     const [currentCode, setCurrentCode] = useState<string>('');
     const [bestCode, setBestCode] = useState<string>('');
     const [userCode, setUserCode] = useState<string>('');
-    const [isValidCode, setIsValidCode] = useState<boolean | null>(null);
+    const [isUserCodeValid, setIsUserCodeValid] = useState<boolean>(false);
 
     const [inspectOnly, setInspectOnly] = useState<boolean>(false);
 
@@ -99,7 +99,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     };
     const detectStateListener = (value: EngineDetectState) => {
         setUserCode(value.userCode);
-        setIsValidCode(value.isValid);
+        setIsUserCodeValid(value.isValid);
     };
 
     const checkoutListener = async (value: boolean, state: EngineState) => {

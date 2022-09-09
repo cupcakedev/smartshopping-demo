@@ -118,3 +118,8 @@ export const DetectIcon = styled.div`
     animation: ${blink} 2s linear infinite;
     display: inline-block;
 `;
+
+export const ValidationImage = styled.img`
+  width: 18px;
+  margin: 0 4px -2px 4px;
+`;
