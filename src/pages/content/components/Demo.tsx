@@ -22,7 +22,8 @@ import {
     EngineFinalCost,
     EngineConfig,
     EngineProgress,
-    EngineState, EngineDetectState,
+    EngineState,
+    EngineDetectState,
 } from 'smartshopping-sdk';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
@@ -199,8 +200,9 @@ export const Demo = ({ engine }: { engine: Engine }) => {
                         close={closeSlider}
                         promocodes={promocodes.length}
                         shop={shop}
-                        total={checkoutState.total as number}
+                        total={checkoutState.total || 0}
                         userCode={userCode}
+                        isUserCodeValid={isUserCodeValid}
                         detectStage={detectStage}
                     />
                 </SliderRoot>

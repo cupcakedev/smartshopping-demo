@@ -1,21 +1,21 @@
 import styled, { keyframes, css } from 'styled-components';
 import { COLORS } from '@constants/theme';
 
-const fadeIn = keyframes`
+const slideIn = keyframes`
   from {
-    transform: translateX(360px);
+    transform: translateX(372px);
   }
   to {
     transform: translateX(0px);
   }
 `;
 
-const fadeOut = keyframes`
+const slideOut = keyframes`
   from {
     transform: translateX(0px);
   }
   to {
-    transform: translateX(360px);
+    transform: translateX(372px);
   }
 `;
 
@@ -28,7 +28,7 @@ const blink = keyframes`
   }
 `;
 
-export const Grid = styled.div<{ fade: 'in' | 'out' }>`
+export const Grid = styled.div<{ slide: 'in' | 'out' }>`
     position: relative;
     width: 340px;
     height: 420px;
@@ -42,12 +42,12 @@ export const Grid = styled.div<{ fade: 'in' | 'out' }>`
     grid-template-rows: auto;
     align-items: center;
     animation: ${(props) =>
-        props.fade === 'in'
+        props.slide === 'in'
             ? css`
-                  ${fadeIn} 0.5s linear forwards
+                  ${slideIn} 0.5s linear forwards
               `
             : css`
-                  ${fadeOut} 0.5s linear forwards
+                  ${slideOut} 0.5s linear forwards
               `};
 `;
 
@@ -109,7 +109,7 @@ export const CloseIcon = styled.img`
     }
 `;
 
-export const DetectIcon = styled.div`
+export const DetectIcon = styled.span`
     width: 15px;
     height: 15px;
     background-color: green;
@@ -120,6 +120,6 @@ export const DetectIcon = styled.div`
 `;
 
 export const ValidationImage = styled.img`
-  width: 18px;
-  margin: 0 4px -2px 4px;
+    width: 18px;
+    margin: 0 4px -2px 4px;
 `;

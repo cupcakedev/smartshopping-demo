@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { COLORS } from '@constants/theme';
 import headBot from '@assets/images/headBot.png';
@@ -17,6 +17,7 @@ import {
     ValidationImage,
 } from './styles';
 import { TDetectStage } from '../Demo';
+import { useAnimation } from '@hooks/useAnimation';
 
 interface IProps {
     inspectOnly: boolean;
@@ -41,15 +42,11 @@ const StartSlider = ({
     userCode,
     isUserCodeValid,
 }: IProps) => {
-    const [fade, setFade] = useState<'in' | 'out'>('in');
-    const fadeout = async () => {
-        setFade('out');
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        close();
-    };
+    const { phase, startAnimation } = useAnimation<'in' | 'out'>('in', 1000);
+    const slideOut = startAnimation('out', close);
 
     return (
-        <Grid fade={fade}>
+        <Grid slide={phase}>
             <Header>
                 <Image src={headBot} />
                 SmartShopping.ai
@@ -67,7 +64,7 @@ const StartSlider = ({
                     data-test-role="start-slider__total"
                     style={{ color: COLORS.primary }}
                 >
-                    {` $${total?.toFixed(2)}`}
+                    {` $${total.toFixed(2)}`}
                 </span>
             </Text>
             {detectStage === 'STARTED' && (
@@ -76,17 +73,22 @@ const StartSlider = ({
                 </Text>
             )}
             {detectStage === 'COUPON-EXTRACTED' && (
-                <Text>Coupon extracted - {userCode} <ValidationImage src={isUserCodeValid ? validIcon : invalidIcon}/></Text>
+                <Text>
+                    Coupon extracted - {userCode}{' '}
+                    <ValidationImage
+                        src={isUserCodeValid ? validIcon : invalidIcon}
+                    />
+                </Text>
             )}
             <Start
                 data-test-role="start-slider__start-button"
-                onClick={inspectOnly ? fadeout : start}
+                onClick={inspectOnly ? slideOut : start}
             >
                 {inspectOnly ? 'Close' : 'Start'}
             </Start>
             <Close
                 data-test-role="start-slider__close-button"
-                onClick={fadeout}
+                onClick={slideOut}
             >
                 <CloseIcon src={closeIcon} />
             </Close>
