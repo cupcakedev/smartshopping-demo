@@ -98,6 +98,7 @@ export const Demo = ({ engine }: { engine: Engine }) => {
     const bestCodeListener = (value: string) => {
         setBestCode(value);
     };
+
     const detectStateListener = (value: EngineDetectState) => {
         setUserCode(value.userCode);
         setIsUserCodeValid(value.isValid);
@@ -157,10 +158,6 @@ export const Demo = ({ engine }: { engine: Engine }) => {
                 break;
             case 'DETECT':
                 setDetectStage('STARTED');
-                break;
-            case 'DETECT_END':
-                setDetectStage('COUPON-EXTRACTED');
-                setStage('AWAIT');
                 break;
             case 'CANCEL':
             case 'ERROR':

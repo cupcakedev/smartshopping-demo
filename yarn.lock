@@ -1660,11 +1660,6 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/lodash@^4.14.178":
-  version "4.14.184"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.184.tgz#23f96cd2a21a28e106dc24d825d4aa966de7a9fe"
-  integrity sha512-RoZphVtHbxPZizt4IcILciSWiC6dcn+eZ8oX9IWEYfDMcocdd42f7NPI6fQj+6zI8y4E0L7gu2pcZKLGTRaV9Q==
-
 "@types/minimatch@*":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
@@ -5252,7 +5247,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.7.2:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5316,7 +5311,7 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-shadow@^19.0.2, react-shadow@^19.0.3:
+react-shadow@^19.0.2:
   version "19.0.3"
   resolved "https://registry.yarnpkg.com/react-shadow/-/react-shadow-19.0.3.tgz#4fa00f10cb1dfe2edd296684ff9807eef440ebb7"
   integrity sha512-B1DoQC/rOyOjDdpgC1bd7nfhrYEF9ukV/vz8HcKaFTNmUkUmFnQCp4NHgEPxDfe3HJ1Mdr5ePzu+ZYAOvX6bNg==
@@ -5698,10 +5693,8 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
-smartshopping-sdk@^0.5.16:
+"smartshopping-sdk@file:../smartshopping/packages/sdk/dist":
   version "0.5.16"
-  resolved "https://registry.yarnpkg.com/smartshopping-sdk/-/smartshopping-sdk-0.5.16.tgz#902332a7b6ccb3660e9dac6dc86cc65f83c1a23a"
-  integrity sha512-Rw51oy7l1rJABomfsDkiD71ZoyRjrnUaq22poZRBRaIHoKkdjCNpYLqeIv4ql3VKdFaEJo/mOjk2cFLJ4C/THw==
 
 source-map-js@^1.0.2:
   version "1.0.2"
@@ -5889,7 +5882,7 @@ style-loader@^3.3.1:
   resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-3.3.1.tgz#057dfa6b3d4d7c7064462830f9113ed417d38575"
   integrity sha512-GPcQ+LDJbrcxHORTRes6Jy2sfvK2kS6hpSfI/fXhPt+spVzxF6LJ1dHLN9zIGmVaaP044YKaIatFaufENRiDoQ==
 
-styled-components@^5, styled-components@^5.3.0, styled-components@^5.3.5:
+styled-components@^5, styled-components@^5.3.0:
   version "5.3.5"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-5.3.5.tgz#a750a398d01f1ca73af16a241dec3da6deae5ec4"
   integrity sha512-ndETJ9RKaaL6q41B69WudeqLzOpY1A/ET/glXkNZ2T7dPjPqpPCXXQjDFYZWwNnE5co0wX+gTCqx9mfxTmSIPg==
@@ -6194,10 +6187,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.5.5:
-  version "4.8.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.2.tgz#e3b33d5ccfb5914e4eeab6699cf208adee3fd790"
-  integrity sha512-C0I1UsrrDHo2fYI5oaCGbSejwX4ch+9Y5jTQELvovfmFkK3HHSZJB8MSJcWLmCUBzQBchCrZ9rMRV6GuNrvGtw==
+typescript@^4.8.3:
+  version "4.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.3.tgz#d59344522c4bc464a65a730ac695007fdb66dd88"
+  integrity sha512-goMHfm00nWPa8UvR/CPSvykqf6dVV8x/dp0c5mFTMTIu0u0FlGWRioyy7Nn0PGAdHxpJZnuO/ut+PpQ8UiHAig==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
@@ -6348,16 +6341,10 @@ watchpack@^2.4.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
-"webext-template-core@git+ssh://git@github.com:cupcakedev/webext-template-core.git":
+webext-template-core@^1.0.0:
   version "1.0.0"
-  resolved "git+ssh://git@github.com:cupcakedev/webext-template-core.git#494b880e2cee8b699c1ee5823a403fc358a3f392"
-  dependencies:
-    "@types/lodash" "^4.14.178"
-    lodash "^4.17.21"
-    prop-types "^15.8.1"
-    react-shadow "^19.0.3"
-    styled-components "^5.3.5"
-    typescript "^4.5.5"
+  resolved "https://registry.yarnpkg.com/webext-template-core/-/webext-template-core-1.0.0.tgz#aeaea71608272659ac779d7adbf046bfa291ad1d"
+  integrity sha512-H6ora9LYdPpjn2NlirhdqRPFpBZqZuKpPNk6bafCrP7K+81R2pRmSC07ORYY2JthrdAsRrtiJCURgeCteMzRqg==
 
 webextension-polyfill@^0.8.0:
   version "0.8.0"
