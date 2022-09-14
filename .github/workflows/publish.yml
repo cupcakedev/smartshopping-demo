@@ -1,0 +1,77 @@
+name: Publish to Chrome Store
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          registry-url: https://registry.npmjs.org/
+
+      - name: get current version in manifest
+        id: read_property
+        uses: ashley-taylor/read-json-property-action@v1.0
+        with:
+          path: ./src/manifest.json
+          property: version
+
+      - name: get patched version
+        id: new_version
+        uses: jessicalostinspace/bump-semantic-version-action@v1.0.1
+        with:
+          semantic-version: ${{ steps.read_property.outputs.value }}
+          version-type: 'PATCH'
+
+      - name: update manifest.json
+        uses: jossef/action-set-json-field@v2
+        with:
+          file: ./src/manifest.json
+          field: version
+          value: ${{ steps.new_version.outputs.bumped-semantic-version }}
+
+      - name: Commit new version
+        uses: EndBug/add-and-commit@v8
+        with:
+          default_author: github_actions
+
+      - name: install packages
+        run: yarn install
+
+      - name: build
+        run: yarn build
+
+      - uses: actions/download-artifact@v2
+      - name: Create zip
+        run: zip ./extension.zip ./dist/* -r
+
+      - name: check chrome archive existence
+        id: check_chrome
+        uses: andstor/file-existence-action@v1
+        with:
+          files: './extension.zip'
+
+      - name: Upload to Chrome Web Store
+        uses: mobilefirstllc/cws-publish@latest
+        if: steps.check_chrome.outputs.files_exists == 'true'
+        with:
+          action: 'upload' # upload / publish / testers
+          client_id: ${{ secrets.CLIENT_ID }}
+          client_secret: ${{ secrets.CLIENT_SECRET }}
+          refresh_token: ${{ secrets.REFRESH_TOKEN }}
+          extension_id: ${{ secrets.APP_ID }}
+          zip_file: './extension.zip'
+
+
