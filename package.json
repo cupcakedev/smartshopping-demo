@@ -15,7 +15,7 @@
     "react-shadow": "^19.0.2",
     "smartshopping-sdk": "^0.5.16",
     "styled-components": "^5.3.0",
-    "webext-template-core": "git+ssh://git@github.com:cupcakedev/webext-template-core.git"
+    "webext-template-core": "^1.0.0"
   },
   "devDependencies": {
     "@nighttrax/eslint-config-tsx": "^8.0.5",
@@ -41,6 +41,7 @@
     "ts-jest": "^27.0.0",
     "ts-loader": "^9.3.0",
     "tsconfig-paths-webpack-plugin": "^3.5.2",
+    "typescript": "^4.8.3",
     "url-loader": "^4.1.1",
     "webpack": "^5.73.0",
     "webpack-bundle-analyzer": "^4.5.0",
