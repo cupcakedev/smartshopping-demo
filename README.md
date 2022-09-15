@@ -155,11 +155,18 @@ type EngineFinalCost = { [key: string]: number }
    Array of promocodes for testing
 6. `currentCode: string`
    Promocode currently being processed
-7. `userCode: string`
-   Promocode entered by the user
-   If the user did not enter the code, `userCode === ''`
-   `userCode === 'UNDEFINED_CODE'` if the user tried to enter an invalid promo code or a valid one but we can't get its value
-   In other cases, `userCode` will contain a valid applied promotional code
+7. `detectState: EngineDetectState`
+   Info collected during `detect` stage
+   `detectState.userCode` - promocode entered by the user. If `detectState.userCode === 'UNDEFINED_CODE'` it means that we can't get the value of the code, but we know that it was entered
+   `detectState.isValid` - validity of the code entered by the user. `true` if the code is successfully applied and `false` if the entered code turned out to be erroneous
+
+  ```
+  type EngineDetectState {
+    userCode: string | 'UNDEFINED_CODE';
+    isValid: boolean;
+  }
+  ```
+
 8. `bestCode: string`
    Most profitable promocode
    If none of the codes worked, `bestCode === ''`
@@ -178,7 +185,7 @@ const unbinders = engine.subscribe(
       progress: progressListener,
       currentCode: currentCodeListener,
       bestCode: bestCodeListener,
-      userCode: userCodeListener,
+      detectState: detectStateListener,
       checkout: checkoutListener,
     }
 );
@@ -216,7 +223,7 @@ interface EngineState {
   promocodes: Array<string>;
   bestCode: string;
   currentCode: string;
-  userCode: string,
+  detectState: EngineDetectState;
   checkout: boolean;
 }
 ```
