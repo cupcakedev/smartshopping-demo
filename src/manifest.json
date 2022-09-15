@@ -1,17 +1,25 @@
 {
   "name": "SmartShopping Demo MV3",
   "short_name": "MV3 Demo",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Coupon Autoapply",
   "manifest_version": 3,
-  "permissions": ["storage", "tabs", "alarms"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "alarms"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "js": ["content.js"],
-      "matches": ["<all_urls>"],
+      "js": [
+        "content.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ],
       "run_at": "document_end"
     }
   ],
