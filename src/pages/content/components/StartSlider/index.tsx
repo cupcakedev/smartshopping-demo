@@ -44,7 +44,6 @@ const StartSlider = ({
 }: IProps) => {
     const { phase, startAnimation } = useAnimation<'in' | 'out'>('in', 1000);
     const slideOut = startAnimation('out', close);
-    const isCodeExtractPossible = userCode !== 'UNDEFINED_CODE';
 
     return (
         <Grid slide={phase}>
@@ -68,12 +67,12 @@ const StartSlider = ({
                     {` $${total.toFixed(2)}`}
                 </span>
             </Text>
-            {detectStage === 'STARTED' && isCodeExtractPossible && !userCode && (
+            {detectStage === 'STARTED' && !userCode && (
                 <Text>
                     Detect started <DetectIcon />
                 </Text>
             )}
-            {detectStage === 'STARTED' && isCodeExtractPossible && !!userCode && (
+            {detectStage === 'STARTED' && !!userCode && (
                 <Text>
                     Coupon extracted - {userCode}{' '}
                     <ValidationImage
