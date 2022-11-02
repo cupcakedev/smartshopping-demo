@@ -11,3 +11,20 @@ export const tabsGet = (tabId: number): Promise<any> => {
     });
     return promise;
 };
+
+export const executeScript = (
+    tabId: number,
+    files: string[]
+): Promise<boolean> =>
+    new Promise((resolve) => {
+        chrome.scripting.executeScript(
+            {
+                target: { tabId },
+                files,
+            },
+            () => {
+                const err = chrome.runtime.lastError;
+                resolve(!!err);
+            }
+        );
+    });

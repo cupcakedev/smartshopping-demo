@@ -1,6 +1,7 @@
 import { bootstrap } from 'smartshopping-sdk';
 import { getApiUrl, requirePromocodes, requireShops } from '@utils/sdkUtils';
 import { LocalStorageKeys } from 'src/storage/config';
+import { executeScript } from '@utils/tabUtils';
 
 (async () => {
     const serverUrl = await getApiUrl();
@@ -31,4 +32,15 @@ import { LocalStorageKeys } from 'src/storage/config';
     };
 
     chrome.storage.onChanged.addListener(storageChangeHandler);
+
+    const scripts = chrome.runtime.getManifest().content_scripts || [];
+    for (const cs of scripts) {
+        for (const tab of await chrome.tabs.query({ url: cs.matches })) {
+            if (tab.id && cs.js) {
+                await executeScript(tab.id, cs.js);
+                const codes = await requirePromocodes(tab.id);
+                startEngine(tab.id, codes);
+            }
+        }
+    }
 })();
