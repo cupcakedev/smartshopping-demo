@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CloseButton, MainButton } from '../styles';
+import { CloseButton, MainButton } from '../Demo/styles';
 import { Grid, Text, Header, Image } from './styles';
 import closeIcon from '@assets/images/closeIcon.png';
 import botWithMoney from '@assets/images/botWithMoney.png';

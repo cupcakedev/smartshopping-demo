@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
-import { StartSlider } from './StartSlider';
-import { StartDialog } from './StartDialog';
-import { NoDealsDialog } from './NoDealsDialog';
-import { TestingDialog } from './TestingDialog';
-import { ResultDialog } from './ResultDialog';
+import { StartDialog } from '../StartDialog';
+import { NoDealsDialog } from '../NoDealsDialog';
+import { TestingDialog } from '../TestingDialog';
+import { ResultDialog } from '../ResultDialog';
 
 import logo from '@assets/images/smartshoppingLogo.png';
 
@@ -25,10 +23,18 @@ import {
     EngineState,
     EngineDetectState,
 } from 'smartshopping-sdk';
+import { DevStartSlider } from '@content/components/DevStartSlider';
+import { ClientStartSlider } from '@content/components/ClientStartSlider';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 
-export const Demo = ({ engine }: { engine: Engine }) => {
+export const Demo = ({
+    engine,
+    isDevMode,
+}: {
+    engine: Engine;
+    isDevMode: boolean;
+}) => {
     const [stage, setStage] = useState<
         'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
     >('INACTIVE');
@@ -68,11 +74,18 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         engine.abort();
         await closeModal();
     };
-    const activateFlow = async () => {
+    const activateDevFlow = async () => {
         setStage('READY');
         await new Promise((resolve) => setTimeout(resolve));
         setModalRootVisibility(true);
     };
+
+    const activateClientFlow = async () => {
+        await new Promise((resolve) => setTimeout(resolve));
+        setModalRootVisibility(true);
+        start();
+    };
+
     const start = async () => {
         await engine.apply();
         await engine.applyBest();
@@ -99,8 +112,14 @@ export const Demo = ({ engine }: { engine: Engine }) => {
         setBestCode(value);
     };
     const detectStateListener = (value: EngineDetectState) => {
-        setUserCode(value.userCode);
-        setIsUserCodeValid(value.isValid);
+        if (value.userCode) {
+            setUserCode(value.userCode);
+            setIsUserCodeValid(value.isValid);
+            if (!isDevMode) {
+                setStage('AWAIT');
+                engine.notifyAboutShowModal();
+            }
+        }
     };
 
     const checkoutListener = async (value: boolean, state: EngineState) => {
@@ -194,17 +213,29 @@ export const Demo = ({ engine }: { engine: Engine }) => {
             {stage === 'AWAIT' && (
                 <SliderRoot data-test-role="start-slider">
                     <GlobalStyle />
-                    <StartSlider
-                        inspectOnly={inspectOnly || promocodes.length === 0}
-                        start={activateFlow}
-                        close={closeSlider}
-                        promocodes={promocodes.length}
-                        shop={shop}
-                        total={checkoutState.total || 0}
-                        userCode={userCode}
-                        isUserCodeValid={isUserCodeValid}
-                        detectStage={detectStage}
-                    />
+                    {isDevMode ? (
+                        <DevStartSlider
+                            inspectOnly={inspectOnly || promocodes.length === 0}
+                            start={activateDevFlow}
+                            close={closeSlider}
+                            promocodes={promocodes.length}
+                            shop={shop}
+                            total={checkoutState.total || 0}
+                            userCode={userCode}
+                            isUserCodeValid={isUserCodeValid}
+                            detectStage={detectStage}
+                        />
+                    ) : (
+                        <ClientStartSlider
+                            inspectOnly={inspectOnly || promocodes.length === 0}
+                            start={activateClientFlow}
+                            close={closeSlider}
+                            promocodes={promocodes.length}
+                            total={checkoutState.total || 0}
+                            userCode={userCode}
+                            detectStage={detectStage}
+                        />
+                    )}
                 </SliderRoot>
             )}
             {['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage) && (

@@ -60,11 +60,9 @@ button:hover button:active {
 export const SliderRoot = styled(root.div)`
     position: fixed;
     z-index: 50000;
-    width: 340px;
-    height: 420px;
+    position: fixed;
     top: 24px;
     right: 24px;
-    border-radius: 8px;
 `;
 
 export const ModalRoot = styled(root.div)<{ visible: boolean }>`

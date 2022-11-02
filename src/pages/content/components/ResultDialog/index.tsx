@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { COLORS } from '@constants/theme';
-import { CloseButton, MainButton } from '../styles';
+import { CloseButton, MainButton } from '../Demo/styles';
 import { Grid, Header, Text, Image } from './styles';
 import botWithMoney from '@assets/images/botWithMoney.png';
 import closeIcon from '@assets/images/closeIcon.png';
