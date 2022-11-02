@@ -16,7 +16,7 @@ import {
     DetectIcon,
     ValidationImage,
 } from './styles';
-import { TDetectStage } from '../Demo';
+import { TDetectStage } from '../Demo/Demo';
 import { useAnimation } from '@hooks/useAnimation';
 
 interface IProps {
@@ -31,7 +31,7 @@ interface IProps {
     isUserCodeValid: boolean;
 }
 
-const StartSlider = ({
+const DevStartSlider = ({
     inspectOnly,
     promocodes,
     total,
@@ -96,4 +96,4 @@ const StartSlider = ({
     );
 };
 
-export { StartSlider };
+export { DevStartSlider };
