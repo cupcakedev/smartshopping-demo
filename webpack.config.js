@@ -41,7 +41,7 @@ const productionConfig = {
             },
         ],
     },
-    devtool: 'source-map',
+    devtool: 'cheap-source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
         plugins: [
