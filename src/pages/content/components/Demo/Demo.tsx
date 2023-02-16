@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StartDialog } from '../StartDialog';
 import { NoDealsDialog } from '../NoDealsDialog';
 import { TestingDialog } from '../TestingDialog';
@@ -27,6 +27,14 @@ import { DevStartSlider } from '@content/components/DevStartSlider';
 import { ClientStartSlider } from '@content/components/ClientStartSlider';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
+export type TCAAStage =
+    | 'INACTIVE'
+    | 'IDLE'
+    | 'AWAIT'
+    | 'READY'
+    | 'APPLY'
+    | 'SUCCESS'
+    | 'FAIL';
 
 export const Demo = ({
     engine,
@@ -35,27 +43,25 @@ export const Demo = ({
     engine: Engine;
     isDevMode: boolean;
 }) => {
-    const [stage, setStage] = useState<
-        'INACTIVE' | 'IDLE' | 'AWAIT' | 'READY' | 'APPLY' | 'SUCCESS' | 'FAIL'
-    >('INACTIVE');
-
+    const [stage, setStage] = useState<TCAAStage>('INACTIVE');
     const [detectStage, setDetectStage] = useState<TDetectStage>('INACTIVE');
 
-    const [shop, setShop] = useState<string>('');
+    const [shop, setShop] = useState('');
     const [checkoutState, setCheckoutState] = useState<EngineCheckoutState>({
         total: null,
     });
     const [finalCost, setFinalCost] = useState<EngineFinalCost>({});
     const [promocodes, setPromocodes] = useState<Array<string>>([]);
-    const [currentCode, setCurrentCode] = useState<string>('');
-    const [bestCode, setBestCode] = useState<string>('');
-    const [userCode, setUserCode] = useState<string>('');
-    const [isUserCodeValid, setIsUserCodeValid] = useState<boolean>(false);
+    const [currentCode, setCurrentCode] = useState('');
+    const [bestCode, setBestCode] = useState('');
+    const [userCode, setUserCode] = useState('');
+    const [isUserCodeValid, setIsUserCodeValid] = useState(false);
 
-    const [inspectOnly, setInspectOnly] = useState<boolean>(false);
+    const [inspectOnly, setInspectOnly] = useState(false);
+    const hasDetect = useRef(false);
 
-    const [modalRootVisibility, setModalRootVisibility] =
-        useState<boolean>(false);
+    const [startSliderVisibility, setStartSliderVisibility] = useState(false);
+    const [modalRootVisibility, setModalRootVisibility] = useState(false);
 
     const closeSlider = () => {
         setStage('INACTIVE');
@@ -117,6 +123,7 @@ export const Demo = ({
             setIsUserCodeValid(value.isValid);
             if (!isDevMode) {
                 setStage('AWAIT');
+                setStartSliderVisibility(true);
                 engine.notifyAboutShowModal();
             }
         }
@@ -137,21 +144,31 @@ export const Demo = ({
                 document.addEventListener('load', inspector);
             }
 
-            if (!state.config?.detect) return;
+            hasDetect.current = !!state?.config?.detect.length;
+        }
+    };
 
-            const isDetectAvailable = state.config?.detect?.length > 0;
-            const isPromocodesEmpty = state.promocodes.length === 0;
+    const handlResultFromBackground = (message: {
+        type: 'has_CAA_codes' | 'no_CAA_codes';
+    }) => {
+        if (message.type === 'has_CAA_codes') {
+            setStartSliderVisibility(true);
+            engine.notifyAboutShowModal();
+        }
 
-            if (isDetectAvailable && isPromocodesEmpty) {
-                if (document.readyState === 'complete') {
+        if (message.type === 'no_CAA_codes') {
+            if (!hasDetect.current) {
+                return;
+            }
+
+            if (document.readyState === 'complete') {
+                engine.detect();
+            } else {
+                const detector = () => {
+                    document.removeEventListener('load', detector);
                     engine.detect();
-                } else {
-                    const detector = () => {
-                        document.removeEventListener('load', detector);
-                        engine.detect();
-                    };
-                    document.addEventListener('load', detector);
-                }
+                };
+                document.addEventListener('load', detector);
             }
         }
     };
@@ -161,7 +178,11 @@ export const Demo = ({
             case 'INSPECT_END':
                 if (state.checkoutState.total) {
                     setStage('AWAIT');
-                    engine.notifyAboutShowModal();
+                    chrome.runtime
+                        .sendMessage({
+                            type: 'ready_to_CAA',
+                        })
+                        .then(handlResultFromBackground);
                 } else {
                     setStage('INACTIVE');
                 }
@@ -210,7 +231,7 @@ export const Demo = ({
 
     return (
         <>
-            {stage === 'AWAIT' && (
+            {stage === 'AWAIT' && startSliderVisibility && (
                 <SliderRoot data-test-role="start-slider">
                     <GlobalStyle />
                     {isDevMode ? (

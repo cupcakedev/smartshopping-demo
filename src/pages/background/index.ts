@@ -5,7 +5,7 @@ import { executeScript } from '@utils/tabUtils';
 
 (async () => {
     const serverUrl = await getApiUrl();
-    const { install, startEngine } = bootstrap({
+    const { install, startEngine, sendCodes } = bootstrap({
         clientID: 'demo',
         key: 'very secret key',
         serverUrl,
@@ -16,21 +16,38 @@ import { executeScript } from '@utils/tabUtils';
 
     chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
         if (changeInfo.status === 'complete') {
-            const codes = await requirePromocodes(tabId);
-            startEngine(tabId, codes);
+            startEngine(tabId);
         }
     });
+
     chrome.tabs.onReplaced.addListener(async (tabId) => {
-        const codes = await requirePromocodes(tabId);
-        startEngine(tabId, codes);
+        startEngine(tabId);
     });
+
+    chrome.runtime.onMessage.addListener(
+        async (message, sender, sendResponse) => {
+            const tabId = sender?.tab?.id;
+            if (!tabId) {
+                return;
+            }
+
+            if (message.type === 'ready_to_CAA') {
+                const codes = await requirePromocodes(tabId);
+                if (codes.length) {
+                    sendCodes(tabId, codes);
+                    sendResponse({ type: 'has_CAA_codes' });
+                } else {
+                    sendResponse({ type: 'no_CAA_codes' });
+                }
+            }
+        }
+    );
 
     const storageChangeHandler = (changes: {
         [key: string]: chrome.storage.StorageChange;
     }) => {
         if (LocalStorageKeys.isDevMod in changes) chrome.runtime.reload();
     };
-
     chrome.storage.onChanged.addListener(storageChangeHandler);
 
     const scripts = chrome.runtime.getManifest().content_scripts || [];
@@ -38,8 +55,7 @@ import { executeScript } from '@utils/tabUtils';
         for (const tab of await chrome.tabs.query({ url: cs.matches })) {
             if (tab.id && cs.js) {
                 await executeScript(tab.id, cs.js);
-                const codes = await requirePromocodes(tab.id);
-                startEngine(tab.id, codes);
+                startEngine(tab.id);
             }
         }
     }

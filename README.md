@@ -21,33 +21,49 @@ Background script of extension using **SmartShopping SDK** might look like this:
 import { bootstrap } from 'smartshopping-sdk';
 import { requirePromocodes} from '../utils';
 
-const { install, startEngine } = bootstrap({ clientID: 'demo', key: 'very secret key' });
+const { install, startEngine, sendCodes } = bootstrap({ clientID: 'demo', key: 'very secret key' });
 
 chrome.runtime.onInstalled.addListener(() => {
   install();
 });
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.status === 'complete') {
-    const codes = await requirePromocodes(tabId);
-    startEngine(tabId, codes);
+    startEngine(tabId);
   }
 });
 chrome.tabs.onReplaced.addListener(async (tabId) => {
-  const codes = await requirePromocodes(tabId);
-  startEngine(tabId, codes);
+  startEngine(tabId);
 });
+chrome.runtime.onMessage.addListener(
+  async (message, sender) => {
+    const tabId = sender?.tab?.id;
+    if (!tabId) {
+      return;
+    }
+
+    if (message.type === 'ready_to_CAA') {
+      const codes = await requirePromocodes(tabId);
+      if (codes.length) {
+        sendCodes(tabId, codes);
+      }
+    }
+  }
+);
 ```
 
-`bootstrap` takes three arguments – client ID, secret key (which is used for data decryption) and optional - serverUrl (not used by default). If you dont know your ID and secret key, contact **SmartShopping** tech support.
+`bootstrap` takes three arguments – client ID, secret key (which is used for data decryption) and optional - serverUrl (not used by default). If you dont know your ID and secret key, contact **SmartShopping** tech support
 
-It returns two functions:
+It returns three functions:
 
 - `install: () => Promise<void>` uploads and stores merchants data; also sets up message passing between background and content parts of **SmartShopping**.
 
-- `startEngine: (tabId: number, codes: string[]) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.  
-  Takes browser tab ID and array of promocodes as an arguments.
+- `startEngine: (tabId: number) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.
+  Takes browser tab ID as an argument.
 
-In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `startEngine`.
+- `sendCodes: (tabId: number, codes: string[]) => void` sends to the `Engine` a list of coupons
+  Takes browser tab ID and array of promo codes as an arguments
+
+In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `sendCodes`.
 
 #### Content Script
 
