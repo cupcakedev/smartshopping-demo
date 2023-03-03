@@ -5,7 +5,7 @@ import { executeScript } from '@utils/tabUtils';
 
 (async () => {
     const serverUrl = await getApiUrl();
-    const { install, startEngine, sendCodes } = bootstrap({
+    const { install, startEngine, setCodes } = bootstrap({
         clientID: 'demo',
         key: 'very secret key',
         serverUrl,
@@ -34,7 +34,7 @@ import { executeScript } from '@utils/tabUtils';
             if (message.type === 'ready_to_CAA') {
                 const codes = await requirePromocodes(tabId);
                 if (codes.length) {
-                    sendCodes(tabId, codes);
+                    setCodes(tabId, codes);
                     sendResponse({ type: 'has_CAA_codes' });
                 } else {
                     sendResponse({ type: 'no_CAA_codes' });
