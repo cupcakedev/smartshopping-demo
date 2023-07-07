@@ -5,11 +5,13 @@ import { executeScript } from '@utils/tabUtils';
 
 (async () => {
     const serverUrl = await getApiUrl();
-    const { install, startEngine, setCodes } = bootstrap({
-        clientID: 'demo',
-        key: 'very secret key',
-        serverUrl,
-    });
+    const { install, startEngine, setCodes, checkAdblockAndCookie } = bootstrap(
+        {
+            clientID: 'demo',
+            key: 'very secret key',
+            serverUrl,
+        }
+    );
 
     requireShops();
     install();
@@ -39,6 +41,12 @@ import { executeScript } from '@utils/tabUtils';
                 } else {
                     sendResponse({ type: 'no_CAA_codes' });
                 }
+            }
+
+            if (message.type === 'check_adblock_cookie') {
+                const { isAdblockDisabled, isCookieEnabled } =
+                    await checkAdblockAndCookie();
+                sendResponse({ isAdblockDisabled, isCookieEnabled });
             }
         }
     );

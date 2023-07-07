@@ -15,6 +15,7 @@ import {
 } from './styles';
 
 import {
+    AdblockAndCookieOutput,
     Engine,
     EngineCheckoutState,
     EngineFinalCost,
@@ -148,7 +149,7 @@ export const Demo = ({
         }
     };
 
-    const handlResultFromBackground = (message: {
+    const handleCAACodesResponse = (message: {
         type: 'has_CAA_codes' | 'no_CAA_codes';
     }) => {
         if (message.type === 'has_CAA_codes') {
@@ -173,6 +174,12 @@ export const Demo = ({
         }
     };
 
+    const handleCheckCookieAndAdblockResponse = (
+        value: AdblockAndCookieOutput
+    ) => {
+        console.log('Check on cookie and adblock', value);
+    };
+
     const progressListener = (value: EngineProgress, state: EngineState) => {
         switch (value) {
             case 'INSPECT_END':
@@ -182,7 +189,10 @@ export const Demo = ({
                         .sendMessage({
                             type: 'ready_to_CAA',
                         })
-                        .then(handlResultFromBackground);
+                        .then(handleCAACodesResponse);
+                    chrome.runtime
+                        .sendMessage({ type: 'check_adblock_cookie' })
+                        .then(handleCheckCookieAndAdblockResponse);
                 } else {
                     setStage('INACTIVE');
                 }
