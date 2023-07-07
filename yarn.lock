@@ -5693,10 +5693,10 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
-smartshopping-sdk@^0.6.3:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/smartshopping-sdk/-/smartshopping-sdk-0.6.3.tgz#59157d69902513c6fa6e30d5b439fd3b94e89e54"
-  integrity sha512-frlFuGZl1DH2X0P4JATcuTlVUMlD/vD0YSFSkw+7gNjFpvoP3bgGlwSMlviv3N/PWbvaVXoGe9E3Sduri+X2LA==
+smartshopping-sdk@^0.6.10:
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/smartshopping-sdk/-/smartshopping-sdk-0.6.10.tgz#52605897b30fca1680cf028aa3f1959e1e984a4e"
+  integrity sha512-cDReKqEhrfyidRi3+/sRL9q1VHgpfIPyeDlJBKIuawEUr4k7qwHaLzaQg014CXitz4ARjOBvUoXWt2N4pyiOvw==
 
 source-map-js@^1.0.2:
   version "1.0.2"
