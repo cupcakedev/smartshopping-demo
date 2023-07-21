@@ -15,19 +15,23 @@ export const STORAGE_VERSION = '1.0.0';
 export enum LocalStorageKeys {
     demoShops = 'demoShops',
     isDevMod = 'env_isDevMod',
+    checkOnCookieAndAdblock = 'env_checkOnCookieAndAdblock',
 }
 
 export enum SyncStorageKeys {
     isDevMod = 'env_isDevMod',
+    checkOnCookieAndAdblock = 'env_checkOnCookieAndAdblock',
 }
 
 export interface ILocalStorage {
     [LocalStorageKeys.demoShops]?: IShops[];
     [LocalStorageKeys.isDevMod]?: boolean;
+    [LocalStorageKeys.checkOnCookieAndAdblock]?: boolean;
 }
 
 export interface ISyncStorage {
     [SyncStorageKeys.isDevMod]?: boolean;
+    [SyncStorageKeys.checkOnCookieAndAdblock]?: boolean;
 }
 
 export type Storage = ILocalStorage & ISyncStorage;

@@ -1,19 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StartDialog } from '../StartDialog';
-import { NoDealsDialog } from '../NoDealsDialog';
-import { TestingDialog } from '../TestingDialog';
-import { ResultDialog } from '../ResultDialog';
-
-import logo from '@assets/images/smartshoppingLogo.png';
-
-import {
-    GlobalStyle,
-    ModalRoot,
-    SliderRoot,
-    Container,
-    SmartShoppingLogo,
-} from './styles';
-
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
     AdblockAndCookieOutput,
     Engine,
@@ -24,8 +9,24 @@ import {
     EngineState,
     EngineDetectState,
 } from 'smartshopping-sdk';
+
+import { CAACodesStatus } from 'src/types';
+import { StartDialog } from '@content/components/StartDialog';
+import { NoDealsDialog } from '@content/components/NoDealsDialog';
+import { TestingDialog } from '@content/components/TestingDialog';
+import { ResultDialog } from '@content/components/ResultDialog';
 import { DevStartSlider } from '@content/components/DevStartSlider';
 import { ClientStartSlider } from '@content/components/ClientStartSlider';
+import { CookieOrAdblockWarning } from '@content/components/CookieOrAdblockWarning';
+import logo from '@assets/images/smartshoppingLogo.png';
+
+import {
+    GlobalStyle,
+    ModalRoot,
+    SliderRoot,
+    Container,
+    SmartShoppingLogo,
+} from './styles';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 export type TCAAStage =
@@ -40,9 +41,11 @@ export type TCAAStage =
 export const Demo = ({
     engine,
     isDevMode,
+    checkOnCookieAndAdblock,
 }: {
     engine: Engine;
     isDevMode: boolean;
+    checkOnCookieAndAdblock: boolean;
 }) => {
     const [stage, setStage] = useState<TCAAStage>('INACTIVE');
     const [detectStage, setDetectStage] = useState<TDetectStage>('INACTIVE');
@@ -63,6 +66,19 @@ export const Demo = ({
 
     const [startSliderVisibility, setStartSliderVisibility] = useState(false);
     const [modalRootVisibility, setModalRootVisibility] = useState(false);
+
+    const [coockieAndAdblockState, setCookieAndAdblockState] =
+        useState<AdblockAndCookieOutput>({
+            isAdblockDisabled: true,
+            isCookieEnabled: true,
+        });
+    const [cookieOrAdblockWarnVisible, setCookieOrAdblockWarnVisible] =
+        useState(false);
+
+    const closeCookieOrAdblockModal = useCallback(
+        () => setCookieOrAdblockWarnVisible(false),
+        []
+    );
 
     const closeSlider = () => {
         setStage('INACTIVE');
@@ -149,15 +165,13 @@ export const Demo = ({
         }
     };
 
-    const handleCAACodesResponse = (message: {
-        type: 'has_CAA_codes' | 'no_CAA_codes';
-    }) => {
-        if (message.type === 'has_CAA_codes') {
+    const handleCAACodesResponse = (message: { type: CAACodesStatus }) => {
+        if (message.type === CAACodesStatus.HasCAACodes) {
             setStartSliderVisibility(true);
             engine.notifyAboutShowModal();
         }
 
-        if (message.type === 'no_CAA_codes') {
+        if (message.type === CAACodesStatus.NoCAACodes) {
             if (!hasDetect.current) {
                 return;
             }
@@ -177,22 +191,34 @@ export const Demo = ({
     const handleCheckCookieAndAdblockResponse = (
         value: AdblockAndCookieOutput
     ) => {
-        console.log('Check on cookie and adblock', value);
+        setCookieAndAdblockState(value);
+        if (!value.isAdblockDisabled || !value.isCookieEnabled) {
+            setCookieOrAdblockWarnVisible(true);
+        }
     };
 
-    const progressListener = (value: EngineProgress, state: EngineState) => {
+    const progressListener = async (
+        value: EngineProgress,
+        state: EngineState
+    ) => {
         switch (value) {
             case 'INSPECT_END':
                 if (state.checkoutState.total) {
+                    if (checkOnCookieAndAdblock) {
+                        const cookieAndAdblockValue: AdblockAndCookieOutput =
+                            await chrome.runtime.sendMessage({
+                                type: 'check_adblock_cookie',
+                            });
+                        handleCheckCookieAndAdblockResponse(
+                            cookieAndAdblockValue
+                        );
+                    }
                     setStage('AWAIT');
                     chrome.runtime
                         .sendMessage({
                             type: 'ready_to_CAA',
                         })
                         .then(handleCAACodesResponse);
-                    chrome.runtime
-                        .sendMessage({ type: 'check_adblock_cookie' })
-                        .then(handleCheckCookieAndAdblockResponse);
                 } else {
                     setStage('INACTIVE');
                 }
@@ -241,33 +267,45 @@ export const Demo = ({
 
     return (
         <>
-            {stage === 'AWAIT' && startSliderVisibility && (
-                <SliderRoot data-test-role="start-slider">
-                    <GlobalStyle />
-                    {isDevMode ? (
-                        <DevStartSlider
-                            inspectOnly={inspectOnly || promocodes.length === 0}
-                            start={activateDevFlow}
-                            close={closeSlider}
-                            promocodes={promocodes.length}
-                            shop={shop}
-                            total={checkoutState.total || 0}
-                            userCode={userCode}
-                            isUserCodeValid={isUserCodeValid}
-                            detectStage={detectStage}
-                        />
-                    ) : (
-                        <ClientStartSlider
-                            inspectOnly={inspectOnly || promocodes.length === 0}
-                            start={activateClientFlow}
-                            close={closeSlider}
-                            promocodes={promocodes.length}
-                            total={checkoutState.total || 0}
-                            userCode={userCode}
-                            detectStage={detectStage}
-                        />
-                    )}
-                </SliderRoot>
+            {stage === 'AWAIT' &&
+                startSliderVisibility &&
+                !cookieOrAdblockWarnVisible && (
+                    <SliderRoot data-test-role="start-slider">
+                        <GlobalStyle />
+                        {isDevMode ? (
+                            <DevStartSlider
+                                inspectOnly={
+                                    inspectOnly || promocodes.length === 0
+                                }
+                                start={activateDevFlow}
+                                close={closeSlider}
+                                promocodes={promocodes.length}
+                                shop={shop}
+                                total={checkoutState.total || 0}
+                                userCode={userCode}
+                                isUserCodeValid={isUserCodeValid}
+                                detectStage={detectStage}
+                            />
+                        ) : (
+                            <ClientStartSlider
+                                inspectOnly={
+                                    inspectOnly || promocodes.length === 0
+                                }
+                                start={activateClientFlow}
+                                close={closeSlider}
+                                promocodes={promocodes.length}
+                                total={checkoutState.total || 0}
+                                userCode={userCode}
+                                detectStage={detectStage}
+                            />
+                        )}
+                    </SliderRoot>
+                )}
+            {cookieOrAdblockWarnVisible && (
+                <CookieOrAdblockWarning
+                    coockieAndAdblockState={coockieAndAdblockState}
+                    onModalClose={closeCookieOrAdblockModal}
+                />
             )}
             {['READY', 'APPLY', 'SUCCESS', 'FAIL'].includes(stage) && (
                 <ModalRoot

@@ -15,8 +15,16 @@ document.body.appendChild(injection);
 async function injectEntryPoint() {
     const engine = new Engine();
     const isDevMode = await storage.any.get(LocalStorageKeys.isDevMod);
+    const checkOnCookieAndAdblock = await storage.any.get(
+        LocalStorageKeys.checkOnCookieAndAdblock
+    );
+
     ReactDOM.createRoot(injection).render(
-        <Demo engine={engine} isDevMode={!!isDevMode} />
+        <Demo
+            engine={engine}
+            isDevMode={!!isDevMode}
+            checkOnCookieAndAdblock={!!checkOnCookieAndAdblock}
+        />
     );
 }
 

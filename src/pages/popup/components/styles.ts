@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const Button = styled.button<{ enabled: boolean }>`
     width: 160px;
-    height: 40px;
+    min-height: 40px;
     border-radius: 10px;
     font-size: 20px;
     text-align: center;
@@ -22,6 +22,9 @@ const Button = styled.button<{ enabled: boolean }>`
     color: ${(props) => (props.enabled ? COLORS.white : COLORS.primary)};
     transition: background-color 0.2s;
     cursor: pointer;
+    &:not(:first-child) {
+        margin-top: 10px;
+    }
 `;
 
 export { Container, Button };

@@ -2,6 +2,7 @@ import { bootstrap } from 'smartshopping-sdk';
 import { getApiUrl, requirePromocodes, requireShops } from '@utils/sdkUtils';
 import { LocalStorageKeys } from 'src/storage/config';
 import { executeScript } from '@utils/tabUtils';
+import { CAACodesStatus, ContentToBackroundMessageType } from 'src/types';
 
 (async () => {
     const serverUrl = await getApiUrl();
@@ -33,17 +34,20 @@ import { executeScript } from '@utils/tabUtils';
                 return;
             }
 
-            if (message.type === 'ready_to_CAA') {
+            if (message.type === ContentToBackroundMessageType.ReadyToCAA) {
                 const codes = await requirePromocodes(tabId);
                 if (codes.length) {
                     setCodes(tabId, codes);
-                    sendResponse({ type: 'has_CAA_codes' });
+                    sendResponse({ type: CAACodesStatus.HasCAACodes });
                 } else {
-                    sendResponse({ type: 'no_CAA_codes' });
+                    sendResponse({ type: CAACodesStatus.NoCAACodes });
                 }
             }
 
-            if (message.type === 'check_adblock_cookie') {
+            if (
+                message.type ===
+                ContentToBackroundMessageType.CheckAdblockAndCookie
+            ) {
                 const { isAdblockDisabled, isCookieEnabled } =
                     await checkAdblockAndCookie();
                 sendResponse({ isAdblockDisabled, isCookieEnabled });

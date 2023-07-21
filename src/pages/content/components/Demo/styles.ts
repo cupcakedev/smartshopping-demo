@@ -2,6 +2,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import root from 'react-shadow/styled-components';
 
 import { COLORS } from '@constants/theme';
+import { TCAAStage } from './Demo';
 
 export const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -80,22 +81,25 @@ export const ModalRoot = styled(root.div)<{ visible: boolean }>`
     transition: opacity 0.5s;
 `;
 
-export const Container = styled.div<{ stage: string }>`
+export const Container = styled.div<{ stage?: TCAAStage }>`
     position: relative;
-    width: ${(props) =>
-        ({
-            READY: '700px',
-            APPLY: '700px',
-            SUCCESS: '700px',
-            FAIL: '700px',
-        }[props.stage])};
-    height: ${(props) =>
-        ({
-            READY: '420px',
-            APPLY: '420px',
-            SUCCESS: '420px',
-            FAIL: '420px',
-        }[props.stage])};
+    width: ${(props) => {
+        switch (props?.stage) {
+            default:
+                return '700px';
+        }
+    }};
+    height: ${(props) => {
+        switch (props?.stage) {
+            case 'READY':
+            case 'APPLY':
+            case 'SUCCESS':
+            case 'FAIL':
+                return '450px';
+            default:
+                return '350px';
+        }
+    }};
     transition: width 0.3s, height 0.3s;
     box-shadow: 0 3px 33px 0 rgba(0, 0, 0, 0.53);
     border-radius: 15px;

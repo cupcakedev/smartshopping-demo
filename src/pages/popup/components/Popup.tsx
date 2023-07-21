@@ -8,16 +8,29 @@ export const Popup = () => {
         LocalStorageKeys.isDevMod,
         false
     );
+    const [checkOnCoockieAndAdblock, setCheckOnCookieAndAdblock] =
+        useChromeStorage(LocalStorageKeys.checkOnCookieAndAdblock, false);
 
-    const toggleHandler = useCallback(
+    const toggleHandlerDevMode = useCallback(
         () => setIsDevMod((pState) => !pState),
         [setIsDevMod]
     );
 
+    const toggleHandlerCheckOnCookieAndAdblock = useCallback(
+        () => setCheckOnCookieAndAdblock((pState) => !pState),
+        [setCheckOnCookieAndAdblock]
+    );
+
     return (
         <Container>
-            <Button enabled={isDevMod} onClick={toggleHandler}>
+            <Button enabled={isDevMod} onClick={toggleHandlerDevMode}>
                 Dev mode
+            </Button>
+            <Button
+                enabled={checkOnCoockieAndAdblock}
+                onClick={toggleHandlerCheckOnCookieAndAdblock}
+            >
+                Check on cookie and adblock
             </Button>
         </Container>
     );
