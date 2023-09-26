@@ -3,6 +3,8 @@ import { COLORS } from '@constants/theme';
 
 const Container = styled.div`
     margin: 20px;
+    width: 130px;
+    height: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
