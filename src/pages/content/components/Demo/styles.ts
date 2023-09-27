@@ -17,13 +17,14 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-  box-sizing: border-box;
+    box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	border: 0;
 	font-size: 100%;
 	font-family: Helvetica;
     font-weight: 500;
+    line-height: 1.2;
 	vertical-align: baseline;
 }
 article, aside, details, figcaption, figure, 
