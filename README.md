@@ -97,11 +97,11 @@ And if the user closes the modal prompting them to apply codes, call the `engine
 
 When a user tries to apply a third-party coupon, you can show them a modal window notifying them that they are trying to apply a third-party coupon, to collect statistics you can use methods:
 
-1. `notifyAboutShow3dPartyModal` - when opening the modal window
+1. `notifyAboutShow3dPartyModal` - when opening the modal window;
 
-2. `notifyAboutClose3dPartyModal` - when closing the modal window.
+2. `notifyAboutClose3dPartyModal` - when closing the modal window;
 
-3. `notifyAboutReactivate3dParty` - when reactivating coupon (if you want to offer a user to reactivate a coupon).
+3. `notifyAboutReactivate3dParty` - when reactivating coupon (if you want to offer a user to reactivate a coupon);
 
 Config object looks like this:
 
