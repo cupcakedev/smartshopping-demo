@@ -65,7 +65,9 @@ export const Demo = ({
 
     const closeSlider = () => {
         setStage('INACTIVE');
-        engine.notifyAboutCloseModal();
+        if (!isDevMode) {
+            engine.notifyAboutClose3dPartyModal();
+        }
     };
     const closeModal = async () => {
         setModalRootVisibility(false);
@@ -89,6 +91,7 @@ export const Demo = ({
     const activateClientFlow = async () => {
         await new Promise((resolve) => setTimeout(resolve));
         setModalRootVisibility(true);
+        engine.notifyAboutReactivate3dParty();
         start();
     };
 
@@ -124,7 +127,7 @@ export const Demo = ({
             if (!isDevMode) {
                 setStage('AWAIT');
                 setStartSliderVisibility(true);
-                engine.notifyAboutShowModal();
+                engine.notifyAboutShow3dPartyModal();
             }
         }
     };
