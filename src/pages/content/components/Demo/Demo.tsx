@@ -121,6 +121,7 @@ export const Demo = ({
         if (value.userCode) {
             setUserCode(value.userCode);
             setIsUserCodeValid(value.isValid);
+            setDetectStage('COUPON-EXTRACTED');
             if (!isDevMode) {
                 setStage('AWAIT');
                 setStartSliderVisibility(true);
@@ -157,6 +158,7 @@ export const Demo = ({
         }
 
         if (message.type === 'no_CAA_codes') {
+            setStartSliderVisibility(true);
             if (!hasDetect.current) {
                 return;
             }
