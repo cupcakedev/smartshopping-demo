@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import 'src/logger';
-import { Engine } from 'smartshopping-sdk';
+import { engine } from 'smartshopping-sdk';
 import { Demo } from './components/Demo/Demo';
 import { LocalStorageKeys, storage } from 'src/storage/config';
 
@@ -13,7 +13,6 @@ injection.id = 'smartshop-injection';
 document.body.appendChild(injection);
 
 async function injectEntryPoint() {
-    const engine = new Engine();
     const isDevMode = await storage.any.get(LocalStorageKeys.isDevMod);
     ReactDOM.createRoot(injection).render(
         <Demo engine={engine} isDevMode={!!isDevMode} />
