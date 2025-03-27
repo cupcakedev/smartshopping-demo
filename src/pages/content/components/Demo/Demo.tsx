@@ -110,6 +110,7 @@ export const Demo = ({
     };
     const promocodesListener = (value: Array<string>) => {
         setPromocodes(value);
+        setStartSliderVisibility(!!value.length);
     };
     const currentCodeListener = (value: string) => {
         setCurrentCode(value);
@@ -149,42 +150,11 @@ export const Demo = ({
         }
     };
 
-    const handlResultFromBackground = (message: {
-        type: 'has_CAA_codes' | 'no_CAA_codes';
-    }) => {
-        if (message.type === 'has_CAA_codes') {
-            setStartSliderVisibility(true);
-            engine.notifyAboutShowModal();
-        }
-
-        if (message.type === 'no_CAA_codes') {
-            setStartSliderVisibility(true);
-            if (!hasDetect.current) {
-                return;
-            }
-
-            if (document.readyState === 'complete') {
-                engine.detect();
-            } else {
-                const detector = () => {
-                    document.removeEventListener('load', detector);
-                    engine.detect();
-                };
-                document.addEventListener('load', detector);
-            }
-        }
-    };
-
     const progressListener = (value: EngineProgress, state: EngineState) => {
         switch (value) {
             case 'INSPECT_END':
                 if (state.checkoutState.total) {
                     setStage('AWAIT');
-                    chrome.runtime
-                        .sendMessage({
-                            type: 'ready_to_CAA',
-                        })
-                        .then(handlResultFromBackground);
                 } else {
                     setStage('INACTIVE');
                 }

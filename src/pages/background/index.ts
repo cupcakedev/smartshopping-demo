@@ -1,11 +1,11 @@
 import { bootstrap } from 'smartshopping-sdk';
-import { getApiUrl, requirePromocodes, requireShops } from '@utils/sdkUtils';
+import { getApiUrl, requireShops } from '@utils/sdkUtils';
 import { LocalStorageKeys } from 'src/storage/config';
 import { executeScript } from '@utils/tabUtils';
 
 (async () => {
     const serverUrl = await getApiUrl();
-    const { install, startEngine, setCodes } = bootstrap({
+    const { install, startEngine } = bootstrap({
         clientID: 'demo',
         key: 'very secret key',
         serverUrl,
@@ -23,25 +23,6 @@ import { executeScript } from '@utils/tabUtils';
     chrome.tabs.onReplaced.addListener(async (tabId) => {
         startEngine(tabId);
     });
-
-    chrome.runtime.onMessage.addListener(
-        async (message, sender, sendResponse) => {
-            const tabId = sender?.tab?.id;
-            if (!tabId) {
-                return;
-            }
-
-            if (message.type === 'ready_to_CAA') {
-                const codes = await requirePromocodes(tabId);
-                if (codes.length) {
-                    setCodes(tabId, codes);
-                    sendResponse({ type: 'has_CAA_codes' });
-                } else {
-                    sendResponse({ type: 'no_CAA_codes' });
-                }
-            }
-        }
-    );
 
     const storageChangeHandler = (changes: {
         [key: string]: chrome.storage.StorageChange;
