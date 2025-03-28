@@ -53,7 +53,7 @@ jobs:
       - name: build
         run: yarn build
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
       - name: Create zip
         run: zip ./extension.zip ./dist/* -r
 
