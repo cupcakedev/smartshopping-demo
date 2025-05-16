@@ -9,70 +9,94 @@ Demo extension works with five merchants only – ASOS, MyProtein, Shein, Dell a
 `npm i smartshopping-sdk`
 `yarn add smartshopping-sdk`
 
-### Integration
+## Integration
 
 "storage", "tabs" and "alarms" permissions required
 
-#### Background script
+To use the `checkAdblockAndCookie` function in Manifest V3 need add "scripting" permission and host_permissions in manifest:
+
+```
+"host_permissions": [
+  "*://*/*"
+],
+```
+
+For Manifest V2 add "management" and "<all_urls>" permissions
+
+### Background script
 
 Background script of extension using **SmartShopping SDK** might look like this:
 
 ```
 import { bootstrap } from 'smartshopping-sdk';
-import { requirePromocodes} from '../utils';
+import { requirePromocodes } from '../utils';
 
-const { install, startEngine, sendCodes } = bootstrap({ clientID: 'demo', key: 'very secret key' });
+(async () => {
+  const { install, startEngine, setCodes, checkAdblockAndCookie } = bootstrap({
+    clientID: 'demo',
+    key: 'very secret key',
+  });
 
-chrome.runtime.onInstalled.addListener(() => {
   install();
-});
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  if (changeInfo.status === 'complete') {
-    startEngine(tabId);
-  }
-});
-chrome.tabs.onReplaced.addListener(async (tabId) => {
-  startEngine(tabId);
-});
-chrome.runtime.onMessage.addListener(
-  async (message, sender) => {
-    const tabId = sender?.tab?.id;
-    if (!tabId) {
-      return;
-    }
 
-    if (message.type === 'ready_to_CAA') {
-      const codes = await requirePromocodes(tabId);
-      if (codes.length) {
-        sendCodes(tabId, codes);
+  chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+    if (changeInfo.status === 'complete') {
+      startEngine(tabId);
+    }
+  });
+
+  chrome.tabs.onReplaced.addListener(async (tabId) => {
+    startEngine(tabId);
+  });
+
+  chrome.runtime.onMessage.addListener(
+    async (message, sender, sendResponse) => {
+      const tabId = sender?.tab?.id;
+      if (!tabId) {
+        return;
+      }
+
+      if (message.type === 'ready_to_CAA') {
+        const codes = await requirePromocodes(tabId);
+        if (codes.length) {
+          setCodes(tabId, codes);
+        }
+      }
+
+      if (message.type === 'check_adblock_cookie') {
+        checkAdblockAndCookie()
+          .then(({ isAdblockDisabled, isCookieEnabled }) => sendResponse({ isAdblockDisabled, isCookieEnabled }))
+          .catch(err => console.log(err))
       }
     }
-  }
-);
+  );
+})();
 ```
 
 `bootstrap` takes three arguments – client ID, secret key (which is used for data decryption) and optional - serverUrl (not used by default). If you dont know your ID and secret key, contact **SmartShopping** tech support
 
-It returns three functions:
+It returns four functions:
 
 - `install: () => Promise<void>` uploads and stores merchants data; also sets up message passing between background and content parts of **SmartShopping**.
 
 - `startEngine: (tabId: number) => Promise<void>` identifies merchant in an active tab, uploads corresponding config and initializes `Engine` in a content script.
   Takes browser tab ID as an argument.
 
-- `sendCodes: (tabId: number, codes: string[]) => void` sends to the `Engine` a list of coupons
+- `setCodes: (tabId: number, codes: string[]) => void` sends to the `Engine` a list of coupons
   Takes browser tab ID and array of promo codes as an arguments
 
-In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `sendCodes`.
+- `checkAdblockAndCookie: () => Promise<{ isAdblockDisabled: boolean; isCookieEnabled: boolean; }>;` function checks if Adblock extension is disabled and checks if cookies are enabled and returns an object with two boolean keys.
 
-#### Content Script
 
-In a content script you need to import and create an `Engine` instance:
+In the example above `requirePromocodes` is a function defined by host extension, responsible for finding promocodes which will be passed to `setCodes`.
+
+### Content Script
+
+In a content script you need to import an `engine` instance:
 
 ```
-import { Engine } from 'smartshopping-sdk';
+import { engine } from 'smartshopping-sdk';
 
-const engine = new Engine();
 ```
 
 `engine` receives config object from background script and manages coupon autoapply flow or detect a successful coupon.
@@ -85,15 +109,25 @@ Coupon autoapply flow stages:
 
 3. `engine.applyBest()` – choosing and applying best promocode;
 
+4. `engine.productInspect()` – product information extraction;
+
 All three stages can be executed consistently via `engine.fullCycle()`.
 
-Detect stage - `engine.detect()` – detects if a user tried to apply a coupon;
+Detect stage - `engine.detect()` – detects if a user tried to apply a coupons;
 
 The execution of the stages: `detect`, `apply`, `applyBest` can be aborted using the `engine.abort()` method.
 
 Since it is up to you to show the modal window with the suggestion to apply coupons, call the `engine.notifyAboutShowModal()` method before it is shown so that we can get these statistics.
 
 And if the user closes the modal prompting them to apply codes, call the `engine.notifyAboutCloseModal()` method.
+
+When a user tries to apply a third-party coupon, you can show them a modal window notifying them that they are trying to apply a third-party coupon, to collect statistics you can use methods:
+
+1. `notifyAboutShow3dPartyModal` - when opening the modal window;
+
+2. `notifyAboutClose3dPartyModal` - when closing the modal window;
+
+3. `notifyAboutReactivate3dParty` - when reactivating coupon (if you want to offer a user to reactivate a coupon);
 
 Config object looks like this:
 
@@ -104,8 +138,10 @@ type EngineConfig {
   shopName: string;
   shopUrl: string;
   checkoutUrl: string;
+  productUrl: string;
   inspect: Array<Command>;
   detect: Array<Command>;
+  product: Array<Command>;
   apply: Array<Command>;
   applyBest: Array<Command>;
   selectorsToCheck: Array<string>;
@@ -122,9 +158,9 @@ type EngineConfig {
 
 - `checkoutUrl` – RegEx matching merchant's checkout page
 
-- `detect` – arrays of commands to detect and extract a successful coupon.
+- `productUrl` – RegEx matching merchant's product page
 
-- `inspect`, `apply` and `applyBest` – arrays of commands for respective stages of auto apply flow.
+- `inspect`, `product`, `detect`, `apply` and `applyBest` – arrays of commands for respective stages of auto apply flow.
 
 - `selectorsToCheck` – array of selectors which are necessary to proceed. If any of them are invalid, execution stops with an error.
 
@@ -141,10 +177,10 @@ type EngineConfig {
   | 'INSPECT'
   | 'INSPECT_END'
   | 'DETECT'
-  | 'DETECT_END'
   | 'APPLY'
   | 'APPLY_END'
   | 'APPLY-BEST'
+  | 'PRODUCT'
   | 'APPLY-BEST_END'
   | 'ERROR'
   | 'CANCEL';
@@ -156,7 +192,7 @@ type EngineConfig {
 
 ```
 type EngineCheckoutState {
-  total: null | number;
+  total: number | null;
 }
 ```
 
@@ -186,8 +222,25 @@ type EngineFinalCost = { [key: string]: number }
 8. `bestCode: string`
    Most profitable promocode
    If none of the codes worked, `bestCode === ''`
-9. `checkout: boolean`
-   Flag for being on checkout page
+9. `checkout: boolean | null`
+   The flag is null if you are on a page for which we don't have a config yet. In other cases, the flag has a boolean value and indicates whether you are on the checkout page
+10. `productState: EngineProductState`
+    Info collected during `product` stage
+    `productState.title` – Product name
+    `productState.fullPrice` – Full Price
+    `productState.discountPrice` – Discount Price
+    `productState.sku` – SKU
+    `productState.imageUrl` – Image URL
+
+```
+type EngineProductState {
+  title: null | string;
+  fullPrice: null | number;
+  discountPrice: null | number;
+  sku: null | string;
+  imageUrl: null | string;
+}
+```
 
 You can subscribe to those properties' changes via `engine.subscribe()`...
 
@@ -200,14 +253,15 @@ const unbinders = engine.subscribe(
       promocodes: promocodesListener,
       progress: progressListener,
       currentCode: currentCodeListener,
-      bestCode: bestCodeListener,
       detectState: detectStateListener,
+      bestCode: bestCodeListener,
       checkout: checkoutListener,
+      product: productListener,
     }
 );
 ```
 
-...and unsubscribe via `engine.ubsubscribe()`, passing return value of `engine.subscribe()` as an argument:
+...and unsubscribe via `engine.unsubscribe()`, passing return value of `engine.subscribe()` as an argument:
 
 ```
 engine.unsubscribe(unbinders);
@@ -226,21 +280,22 @@ const unbinders = engine.subscribe(
 );
 ```
 
-`listener`-functions look like this:
+`listener` - functions look like this:
 
 ```
 listener: (value: %property_type%, state: EngineState) => void;
 
 interface EngineState {
   checkoutState: EngineCheckoutState;
+  productState: EngineProductState;
   finalCost: EngineFinalCost;
   progress: EngineProgress;
   config: EngineConfig;
   promocodes: Array<string>;
+  detectState: EngineDetectState;
   bestCode: string;
   currentCode: string;
-  detectState: EngineDetectState;
-  checkout: boolean;
+  checkout: boolean | null;
 }
 ```
 
