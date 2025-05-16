@@ -22,9 +22,11 @@ import {
     EngineProgress,
     EngineState,
     EngineDetectState,
+    EngineProductState,
 } from 'smartshopping-sdk';
 import { DevStartSlider } from '@content/components/DevStartSlider';
 import { ClientStartSlider } from '@content/components/ClientStartSlider';
+import { ProductSlider } from '@content/components/ProductSlider';
 
 export type TDetectStage = 'INACTIVE' | 'STARTED' | 'COUPON-EXTRACTED';
 export type TCAAStage =
@@ -33,6 +35,7 @@ export type TCAAStage =
     | 'AWAIT'
     | 'READY'
     | 'APPLY'
+    | 'PRODUCT'
     | 'SUCCESS'
     | 'FAIL';
 
@@ -49,6 +52,13 @@ export const Demo = ({
     const [shop, setShop] = useState('');
     const [checkoutState, setCheckoutState] = useState<EngineCheckoutState>({
         total: null,
+    });
+    const [productState, setProductState] = useState<EngineProductState>({
+        title: null,
+        discountPrice: null,
+        fullPrice: null,
+        sku: null,
+        imageUrl: null,
     });
     const [finalCost, setFinalCost] = useState<EngineFinalCost>({});
     const [promocodes, setPromocodes] = useState<Array<string>>([]);
@@ -105,6 +115,9 @@ export const Demo = ({
     const checkoutStateListener = (value: EngineCheckoutState) => {
         setCheckoutState(value);
     };
+    const productStateListener = (value: EngineProductState) => {
+        setProductState(value);
+    };
     const finalCostListener = (value: EngineFinalCost) => {
         setFinalCost(value);
     };
@@ -136,10 +149,15 @@ export const Demo = ({
         if (state.checkoutState.total) {
             setModalRootVisibility(true);
         } else if (value) {
+            console.log('if (value) ');
             if (document.readyState === 'complete') {
+                console.log('complete');
                 engine.inspect();
             } else {
+                console.log('SET INSPECTOR');
                 const inspector = () => {
+                    console.log('inspector');
+                    console.log('INSPECT');
                     engine.inspect();
                     document.removeEventListener('load', inspector);
                 };
@@ -147,6 +165,52 @@ export const Demo = ({
             }
 
             hasDetect.current = !!state?.config?.detect.length;
+        }
+    };
+
+    const productListener = async (
+        value: boolean | null,
+        state: EngineState
+    ) => {
+        console.log('productListener', value, state);
+        if (!value) return;
+        if (stage === 'INACTIVE') {
+            setStage(value ? 'PRODUCT' : 'INACTIVE');
+        }
+        if (document.readyState === 'complete') {
+            engine.productInspect();
+        } else {
+            const inspector = () => {
+                engine.productInspect();
+                document.removeEventListener('load', inspector);
+            };
+            document.addEventListener('load', inspector);
+        }
+    };
+
+    const handlResultFromBackground = (message: {
+        type: 'has_CAA_codes' | 'no_CAA_codes';
+    }) => {
+        if (message.type === 'has_CAA_codes') {
+            setStartSliderVisibility(true);
+            engine.notifyAboutShowModal();
+        }
+
+        if (message.type === 'no_CAA_codes') {
+            setStartSliderVisibility(true);
+            if (!hasDetect.current) {
+                return;
+            }
+
+            if (document.readyState === 'complete') {
+                engine.detect();
+            } else {
+                const detector = () => {
+                    document.removeEventListener('load', detector);
+                    engine.detect();
+                };
+                document.addEventListener('load', detector);
+            }
         }
     };
 
@@ -195,6 +259,8 @@ export const Demo = ({
             bestCode: bestCodeListener,
             detectState: detectStateListener,
             checkout: checkoutListener,
+            productState: productStateListener,
+            product: productListener,
         });
         return () => {
             engine.unsubscribe(unbinders);
@@ -203,6 +269,19 @@ export const Demo = ({
 
     return (
         <>
+            {stage === 'PRODUCT' && productState.title && (
+                <SliderRoot data-test-role="product-slider">
+                    <GlobalStyle />
+                    <ProductSlider
+                        fullPrice={productState.fullPrice}
+                        title={productState.title}
+                        close={closeSlider}
+                        discountPrice={productState.discountPrice}
+                        sku={productState.sku}
+                        imageUrl={productState.imageUrl}
+                    />
+                </SliderRoot>
+            )}
             {stage === 'AWAIT' && startSliderVisibility && (
                 <SliderRoot data-test-role="start-slider">
                     <GlobalStyle />
