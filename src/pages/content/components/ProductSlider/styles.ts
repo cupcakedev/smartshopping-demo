@@ -15,6 +15,8 @@ export const Container = styled.div<{ fade: 'in' | 'out' }>`
     position: relative;
     width: 340px;
     text-align: center;
+    max-height: calc(100vh - 40px);
+    overflow: auto;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     padding: 32px 20px;
@@ -100,4 +102,34 @@ export const CloseIconStyled = styled.img`
     &:hover {
         transform: scale(1.2);
     }
+`;
+
+export const VariantsWrapper = styled.div`
+    margin-top: 8px;
+    width: 100%;
+    text-align: left;
+`;
+
+export const VariantGroup = styled.div`
+    margin-bottom: 12px;
+`;
+
+export const VariantLabel = styled.div`
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 14px;
+`;
+
+export const VariantItems = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+`;
+
+export const VariantItem = styled.span`
+    background-color: #f2f2f2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid ${COLORS.primary};
+    font-size: 14px;
 `;

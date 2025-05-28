@@ -14,7 +14,13 @@ import {
     Sku,
     CloseButton,
     CloseIconStyled,
+    VariantsWrapper,
+    VariantGroup,
+    VariantLabel,
+    VariantItems,
+    VariantItem,
 } from './styles';
+import { EngineProductVariantGroup } from 'smartshopping-sdk';
 
 interface IProps {
     close: () => void;
@@ -23,6 +29,7 @@ interface IProps {
     sku: string | null;
     imageUrl: string | null;
     title: string;
+    variants: EngineProductVariantGroup[];
 }
 
 const ProductSlider = ({
@@ -32,6 +39,7 @@ const ProductSlider = ({
     close,
     sku,
     imageUrl,
+    variants,
 }: IProps) => {
     const [fade, setFade] = useState<'in' | 'out'>('in');
 
@@ -73,11 +81,29 @@ const ProductSlider = ({
                     <ProductImage src={imageUrl} alt={title} />
                 </ImageWrapper>
             )}
-
             {sku && (
                 <>
                     <Label>SKU:</Label>
                     <Sku>{sku}</Sku>
+                </>
+            )}
+            {variants.length > 0 && (
+                <>
+                    <Label>Variants:</Label>
+                    <VariantsWrapper>
+                        {variants.map((group) => (
+                            <VariantGroup key={group.label}>
+                                <VariantLabel>{group.label}:</VariantLabel>
+                                <VariantItems>
+                                    {group.items.map((item) => (
+                                        <VariantItem key={item.label}>
+                                            {item.label}
+                                        </VariantItem>
+                                    ))}
+                                </VariantItems>
+                            </VariantGroup>
+                        ))}
+                    </VariantsWrapper>
                 </>
             )}
         </Container>

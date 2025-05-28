@@ -59,6 +59,7 @@ export const Demo = ({
         fullPrice: null,
         sku: null,
         imageUrl: null,
+        variants: [],
     });
     const [finalCost, setFinalCost] = useState<EngineFinalCost>({});
     const [promocodes, setPromocodes] = useState<Array<string>>([]);
@@ -273,6 +274,7 @@ export const Demo = ({
                 <SliderRoot data-test-role="product-slider">
                     <GlobalStyle />
                     <ProductSlider
+                        variants={productState.variants}
                         fullPrice={productState.fullPrice}
                         title={productState.title}
                         close={closeSlider}
